@@ -1,0 +1,29 @@
+{
+  "name": "flight-compare-cs554",
+  "version": "1.0.0",
+  "description": "cs554 final project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jayrungta/FlightCompare-CS554.git"
+  },
+  "author": "Jay Rungta, Khalid Alnuaim, Manali Satghar, Mingwei Xu, Siran Wang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jayrungta/FlightCompare-CS554/issues"
+  },
+  "homepage": "https://github.com/jayrungta/FlightCompare-CS554#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.2",
+    "express-session": "^1.15.2",
+    "mongodb": "^2.2.25",
+    "node-uuid": "^1.4.8",
+    "xss": "^0.3.3"
+  }
+}
