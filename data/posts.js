@@ -1,4 +1,4 @@
-const postsCollection = require("../dbconfig/MongoCollections.js").posts;
+const posts = require("../dbconfig/MongoCollections.js").posts;
 const users = require("./users");
 const flights = require("./flights");
 const uuid = require('node-uuid');
@@ -15,7 +15,7 @@ module.exports = {
      * @throws Will throw an error if user of flight not found.
      */
     addPost: async (post) => {
-        let posts = await postsCollection();
+        let postsCollection = await posts();
         let user = await users.getUserById(post.userId);
         let flight = await flights.getFlightById(post.flightId);
 
@@ -31,7 +31,7 @@ module.exports = {
             },
             text: xss(post.text)
         };
-        let insertedPost = await posts.insertOne(newPost);
+        let insertedPost = await postsCollection.insertOne(newPost);
         return insertedPost.insertedId;
     },
 
@@ -40,8 +40,8 @@ module.exports = {
      * @throws Will throw an error if delete fails.
      */
     deletePost: async (id) => {
-        let posts = await postsCollection();
-        let deletedPost = await posts.deleteOne({ _id: id });
+        let postsCollection = await posts();
+        let deletedPost = await postsCollection.deleteOne({ _id: id });
         if (deletedPost.deletedCount == 0)
             throw (`Failed to delete post with id ${id}.`);
         return id;
@@ -52,8 +52,8 @@ module.exports = {
      * @throws Will throw an error if post not found.
      */
     getPostById: async (id) => {
-        let posts = await postsCollection();
-        let post = await posts.findOne({ _id: id });
+        let postsCollection = await posts();
+        let post = await postsCollection.findOne({ _id: id });
         if (!post)
             throw ("User not found.");
         return post;
@@ -63,8 +63,8 @@ module.exports = {
      * @returns {Object[]} postsOfUser
      */
     getPostsByUser: async (userId) => {
-        let posts = await postsCollection();
-        let postsOfUser = await posts.find({ 'user.id': userId }).toArray();
+        let postsCollection = await posts();
+        let postsOfUser = await postsCollection.find({ 'user.id': userId }).toArray();
         return postsOfUser;
     },
 
@@ -72,8 +72,8 @@ module.exports = {
      * @returns {Object[]} postsOfFlight
      */
     getPostsByFlight: async (flightId) => {
-        let posts = await postsCollection();
-        let postsOfFlight = await posts.find({ 'flight.id': flightId }).toArray();
+        let postsCollection = await posts();
+        let postsOfFlight = await postsCollection.find({ 'flight.id': flightId }).toArray();
         return postsOfFlight;
     }
 }

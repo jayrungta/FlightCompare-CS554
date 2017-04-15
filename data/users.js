@@ -1,4 +1,4 @@
-const usersCollection = require("../dbconfig/MongoCollections.js").users;
+const users = require("../dbconfig/MongoCollections.js").users;
 const uuid = require('node-uuid');
 const bcrypt = require('bcrypt-nodejs');
 const xss = require('xss');
@@ -19,8 +19,8 @@ module.exports = {
             }
         };
 
-        let users = await usersCollection();
-        let insertedUser = await users.insertOne(newUser);
+        let usersCollection = await users();
+        let insertedUser = await usersCollection.insertOne(newUser);
         return insertedUser.insertedId;
     },
 
@@ -34,8 +34,8 @@ module.exports = {
      * @throws Will throw an error if delete fails.
      */
     deleteUser: async (id) => {
-        let users = await usersCollection();
-        let deletedUser = await users.deleteOne({ _id: id });
+        let usersCollection = await users();
+        let deletedUser = await usersCollection.deleteOne({ _id: id });
         if (deletedUser.deletedCount == 0)
             throw (`Failed to delete user with id ${id}.`);
         return id;
@@ -46,8 +46,8 @@ module.exports = {
      * @throws Will throw an error if user not found.
      */
     getUserById: async (id) => {
-        let users = await usersCollection();
-        let user = await users.findOne({ _id: id });
+        let usersCollection = await users();
+        let user = await usersCollection.findOne({ _id: id });
         if (!user)
             throw ("User not found.");
         return user;
@@ -57,8 +57,8 @@ module.exports = {
      * @returns {Object[]} allUsers
      */
     getAllUsers: async () => {
-        let users = await usersCollection();
-        let allUsers = await users.find({}).toArray();
+        let usersCollection = await users();
+        let allUsers = await usersCollection.find({}).toArray();
         return allUsers;
     },
 
@@ -67,8 +67,8 @@ module.exports = {
      * @throws Will throw an error if username or password incorrect.
      */
     getUserByAuth: async (username, password) => {
-        let users = await usersCollection();
-        let user = users.findOne({ username: username });
+        let usersCollection = await users();
+        let user = usersCollection.findOne({ username: username });
         if (!user || bcrypt.compareSync(password, user.password))
             throw ("Username or password incorrect.");
         return user;
