@@ -1,9 +1,11 @@
-const userData = require("./users.js");
-const postData = require("./posts.js");
-const flightData = require("./flights.js");
+const userData = require("./users");
+const postData = require("./posts");
+const flightData = require("./flights");
+const orderData = require("./orders");
 
 module.exports = {
     users: userData,
     posts: postData,
-    flights: flightData
+    flights: flightData,
+    orders: orderData
 }

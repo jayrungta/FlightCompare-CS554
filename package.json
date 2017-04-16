@@ -24,6 +24,7 @@
     "express-session": "^1.15.2",
     "mongodb": "^2.2.25",
     "node-uuid": "^1.4.8",
+    "nodemailer": "^4.0.1",
     "xss": "^0.3.3"
   }
 }

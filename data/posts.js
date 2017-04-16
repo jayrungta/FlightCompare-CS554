@@ -1,8 +1,6 @@
 const posts = require("../dbconfig/MongoCollections.js").posts;
 const users = require("./users");
-const flights = require("./flights");
 const uuid = require('node-uuid');
-const bcrypt = require('bcrypt-nodejs');
 const xss = require('xss');
 
 module.exports = {
@@ -12,22 +10,21 @@ module.exports = {
      * @param post.flightId - Id of the flight on which the user posts.
      * @param post.text - Text of the post.
      * @returns id - Id of the newly added post.
-     * @throws Will throw an error if user of flight not found.
+     * @throws Will throw an error if user not found.
      */
     addPost: async (post) => {
         let postsCollection = await posts();
         let user = await users.getUserById(post.userId);
-        let flight = await flights.getFlightById(post.flightId);
 
-        //TODO: add more info
+        // TODO: add more info
         let newPost = {
             _id: uuid.v4(),
             user: {
-                id: userId,
+                id: post.userId,
                 name: `${user.profile.firstName} ${user.profile.lastName}`
             },
             flight: {
-                id: flightId
+                id: post.flightId
             },
             text: xss(post.text)
         };
@@ -42,7 +39,7 @@ module.exports = {
     deletePost: async (id) => {
         let postsCollection = await posts();
         let deletedPost = await postsCollection.deleteOne({ _id: id });
-        if (deletedPost.deletedCount == 0)
+        if (deletedPost.deletedCount === 0)
             throw (`Failed to delete post with id ${id}.`);
         return id;
     },
@@ -55,7 +52,7 @@ module.exports = {
         let postsCollection = await posts();
         let post = await postsCollection.findOne({ _id: id });
         if (!post)
-            throw ("User not found.");
+            throw ("Post not found.");
         return post;
     },
 

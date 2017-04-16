@@ -12,10 +12,11 @@ module.exports = {
         let newUser = {
             _id: uuid.v4(),
             username: xss(user.username),
-            password: bcrypt.hashSync(xss(user.password)),
+            password: bcrypt.hashSync(user.password),
             profile: {
                 firstName: xss(user.firstName),
-                lastName: xss(user.lastName)
+                lastName: xss(user.lastName),
+                email: xss(user.email)
             }
         };
 
@@ -24,7 +25,7 @@ module.exports = {
         return insertedUser.insertedId;
     },
 
-    //TODO: add more
+    // TODO: add more
     updateUser: async (id, newUserData) => {
         return newUserData;
     },
@@ -36,7 +37,7 @@ module.exports = {
     deleteUser: async (id) => {
         let usersCollection = await users();
         let deletedUser = await usersCollection.deleteOne({ _id: id });
-        if (deletedUser.deletedCount == 0)
+        if (deletedUser.deletedCount === 0)
             throw (`Failed to delete user with id ${id}.`);
         return id;
     },
@@ -51,6 +52,12 @@ module.exports = {
         if (!user)
             throw ("User not found.");
         return user;
+    },
+
+    getUsersByFlight: async (flightId) => {
+        let usersCollection = await users();
+        let allUsers = await usersCollection.find({}).toArray();
+        return allUsers;
     },
 
     /**
@@ -86,4 +93,5 @@ module.exports = {
         })
         return true;
     }
+
 }
