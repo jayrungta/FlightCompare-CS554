@@ -1,4 +1,4 @@
-const users = require("../dbconfig/MongoCollections.js").users;
+const {users} = require("../dbconfig/MongoCollections.js");
 const uuid = require('node-uuid');
 const bcrypt = require('bcrypt-nodejs');
 const xss = require('xss');

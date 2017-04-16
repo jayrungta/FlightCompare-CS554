@@ -1,4 +1,4 @@
-const orders = require("../dbconfig/MongoCollections.js").orders;
+const {orders} = require("../dbconfig/MongoCollections.js");
 const users = require("./users");
 const flights = require("./flights");
 const uuid = require('node-uuid');
