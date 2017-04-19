@@ -7,6 +7,14 @@ const configRoutes = require("./routes");
 const app = express();
 const static = express.static(__dirname + '/public');
 
+//wkhtmlpdf
+const wkhtmlpdf = require('wkhtmlpdf');
+const fs = require('fs');
+
+// URL      get the pdf file
+wkhtmltopdf('http://localhost:3000/recipes', { pageSize: 'letter' })
+  .pipe(fs.createWriteStream('out.pdf'));
+
 app.use("/public", static);
 app.use(cookieParser());
 app.use(bodyParser.json());
