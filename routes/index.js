@@ -1,3 +1,4 @@
+const loginRoutes = require("./login");
 const data = require("../data");
 const userData = data.users;
 
@@ -5,6 +6,9 @@ const constructorMethod = (app) => {
     app.get("/", async (req, res) => {
         res.json(await userData.getAllUsers());
     });
+
+    //routes for login
+    app.get("/login", loginRoutes);
 
     app.use("*", (req, res) => {
         res.sendStatus(404);
