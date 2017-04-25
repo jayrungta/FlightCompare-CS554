@@ -26,6 +26,16 @@
     "node-uuid": "^1.4.8",
     "nodemailer": "^4.0.1",
     "xss": "^0.3.3",
-    "wkhtmltopdf": "^0.3.4"
+    "wkhtmltopdf": "^0.3.4",
+    "connect-flash": "^0.1.1",
+    "express-handlebars": "^3.0.0",
+    "handlebars": "^4.0.5",
+    "express-sanitizer": "^1.0.1",
+    "express-session": "^1.14.2",
+    "method-override": "^2.3.7",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "request": "^2.79.0",
+    "sanitizer": "^0.1.3"
   }
 }
