@@ -75,8 +75,8 @@ module.exports = {
      */
     getUserByAuth: async (username, password) => {
         let usersCollection = await users();
-        let user = usersCollection.findOne({ username: username });
-        if (!user || bcrypt.compareSync(password, user.password))
+        let user = await usersCollection.findOne({ username: username });
+        if (!user || ! bcrypt.compareSync(password, user.password))
             throw ("Username or password incorrect.");
         return user;
     },
