@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node server.js"  
-    },
+    "start": "node server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jayrungta/FlightCompare-CS554.git"
@@ -30,13 +30,13 @@
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
-    "connect-flash": "^0.1.1",
     "body-parser": "^1.17.1",
+    "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
     "express-handlebars": "^3.0.0",
-    "handlebars": "^4.0.5",
     "express-session": "^1.15.2",
+    "handlebars": "^4.0.5",
     "mongodb": "^2.2.25",
     "node-uuid": "^1.4.8",
     "nodemailer": "^4.0.1",

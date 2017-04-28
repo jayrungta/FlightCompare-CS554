@@ -34,6 +34,9 @@ passport.deserializeUser(async function (id, done) {
 });
 
 router.get("/", (req, res) => {
+    if(req.user)
+    res.redirect("/search");
+    else
     res.render("login", {})
 });
 
@@ -45,19 +48,31 @@ router.post('/',
     })
 );
 
+router.post('/namecheck', async (req,res)=>{
+    let bool = await userData.isUsernameUnique(req.body.username);
+    res.send(bool);
+});
+
+router.get('/check', (req,res)=>{
+    if(req.user)
+    res.send(true);
+    else
+    res.send(false);
+});
+
 router.get("/register", (req, res) => {
     res.render("register", {})
 });
 
 router.post("/register", async (req, res) => {
-    let user = { firstName: req.body.firstname, lastName: req.body.lastname, username: req.body.username, password: req.body.password, email: req.body.email };
+    // let user = { firstName: req.body.user.firstname, lastName: req.body.user.lastname, username: req.body.user.username, password: req.body.user.password, email: req.body.user.email };
     try {
-        let userID = await userData.addUser(user);
+        let userID = await userData.addUser(req.body.user);
         if (userID)
-            res.redirect("/");
+            res.send(userID);
     }
     catch (err) {
-        res.json(err);
+        res.status(500).send(err);
     }
 });
 
