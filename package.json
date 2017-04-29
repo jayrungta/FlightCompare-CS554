@@ -17,15 +17,17 @@
   },
   "homepage": "https://github.com/jayrungta/FlightCompare-CS554#readme",
   "dependencies": {
+    "aviation-json": "^0.3.1",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
     "express-session": "^1.15.2",
+    "google-flights-wrapper": "^1.0.5",
     "mongodb": "^2.2.25",
     "node-uuid": "^1.4.8",
     "nodemailer": "^4.0.1",
-    "xss": "^0.3.3",
-    "wkhtmltopdf": "^0.3.4"
+    "wkhtmltopdf": "^0.3.4",
+    "xss": "^0.3.3"
   }
 }
