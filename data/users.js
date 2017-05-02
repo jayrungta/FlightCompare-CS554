@@ -8,7 +8,6 @@ module.exports = {
      * @returns id - Id of the newly added user.
      */
     addUser: async (user) => {
-        // TODO: add more info
         let newUser = {
             _id: uuid.v4(),
             username: xss(user.username),
@@ -75,8 +74,8 @@ module.exports = {
      */
     getUserByAuth: async (username, password) => {
         let usersCollection = await users();
-        let user = usersCollection.findOne({ username: username });
-        if (!user || bcrypt.compareSync(password, user.password))
+        let user = await usersCollection.findOne({ username: username });
+        if (!user || ! bcrypt.compareSync(password, user.password))
             throw ("Username or password incorrect.");
         return user;
     },
@@ -86,12 +85,14 @@ module.exports = {
      * @returns {boolean}
      */
     isUsernameUnique: async (username) => {
-        let allUsers = await getAllUsers();
+        let usersCollection = await users();
+        let allUsers = await usersCollection.find({}).toArray();
+        let flag = true;
         allUsers.forEach((user) => {
-            if (user.username === username)
-                return false;
+            if (user.username == username)
+                flag = false;
         })
-        return true;
+        return flag;
     }
 
 }
