@@ -15,6 +15,8 @@ module.exports = {
                     },
                     "maxPrice": maxPrice,
                     "solutions": solutions,
+                    "saleCountry": "US",
+                    "ticketingCountry": "US",
                     "slice": [
                         {
                             "origin": origin,
@@ -31,7 +33,7 @@ module.exports = {
                 let jsonObject = {};
                 let airline;
                 let price;
-                let departureTime, arrivalTime, origin, destination;
+                let departureTime, arrivalTime, origin, destination,duration;
                 if (body.error) {
                     console.error(body.error);
                     reject(body.error);
@@ -45,7 +47,8 @@ module.exports = {
                         departureTime = body.trips.tripOption[i].slice[0].segment[0].leg[0].departureTime;
                         origin = body.trips.tripOption[i].slice[0].segment[0].leg[0].origin;
                         destination = body.trips.tripOption[i].slice[0].segment[0].leg[0].destination;
-                        jsonObject = { "airline": airline, "price": price, "arrivalTime":arrivalTime, "departureTime":departureTime, "origin":origin, "destination": destination };
+                        duration = body.trips.tripOption[i].slice[0].segment[0].leg[0].duration;
+                        jsonObject = { "airline": airline, "price": price, "arrivalTime":arrivalTime, "departureTime":departureTime, "origin":origin, "destination": destination, "duration":duration };
                         flights.push(jsonObject);
                     }
                 } catch (e) {
