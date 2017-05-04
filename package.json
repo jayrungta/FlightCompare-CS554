@@ -37,7 +37,6 @@
     "express": "^4.15.2",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.2",
-    "google-flights-wrapper": "^1.0.5",
     "mongodb": "^2.2.25",
     "node-uuid": "^1.4.8",
     "nodemailer": "^4.0.1",
