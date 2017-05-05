@@ -9,8 +9,6 @@ passport.use(new LocalStrategy(
     async function (username, password, done) {
         try {
             let user = await userData.getUserByAuth(username, password);
-            if (!user)
-                return done(null, false, { message: 'Incorrect username or password.' });
 
             return done(null, user);
         }
@@ -34,10 +32,10 @@ passport.deserializeUser(async function (id, done) {
 });
 
 router.get("/", (req, res) => {
-    if(req.user)
-    res.redirect("/search");
+    if (req.user)
+        res.redirect("/search");
     else
-    res.render("login", {})
+        res.render("login", {})
 });
 
 router.post('/',
@@ -48,16 +46,16 @@ router.post('/',
     })
 );
 
-router.post('/namecheck', async (req,res)=>{
+router.post('/namecheck', async (req, res) => {
     let bool = await userData.isUsernameUnique(req.body.username);
     res.send(bool);
 });
 
-router.get('/check', (req,res)=>{
-    if(req.user)
-    res.send(true);
+router.get('/check', (req, res) => {
+    if (req.user)
+        res.send(true);
     else
-    res.send(false);
+        res.send(false);
 });
 
 router.get("/register", (req, res) => {

@@ -19,8 +19,8 @@ router.get("/airlines", (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    let adultCount = req.body.query.adultCount;
-    let maxPrice = "USD" + req.body.query.maxPrice;
+    let adultCount = req.body.adultCount;
+    let maxPrice = req.body.maxPrice;
     let solutions = "20";
     let origin = req.body.query.origin;
     let destination = req.body.query.destination;
