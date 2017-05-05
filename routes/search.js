@@ -5,22 +5,24 @@ const userData = data.users;
 const flightData = data.flights;
 const aviationJson = require("aviation-json");
 
+/*
 let airlineInfo = null;
 
-if(!airlineInfo){
+if (!airlineInfo) {
     // Get all airlines info
     airlineInfo = aviationJson.airlines;
     console.log(airlineInfo);
 }
+*/
 
 router.get("/", (req, res) => {
-    if(req.user)
-    res.render("search",{});
+    if (req.user)
+        res.render("search", {});
     else
-    res.redirect("/login");
+        res.redirect("/login");
 });
 
-router.post('/', async (req,res)=>{
+router.post('/', async (req, res) => {
     let adultCount = req.body.adultCount;
     let maxPrice = req.body.maxPrice;
     let solutions = "20";
@@ -28,12 +30,12 @@ router.post('/', async (req,res)=>{
     let destination = req.body.destination;
     let date = req.body.date;
 
-    try{
-    let flights = await flightData.searchFlights(adultCount, maxPrice, solutions, origin, destination, date);
-    res.json(flights);
+    try {
+        let flights = await flightData.searchFlights(adultCount, maxPrice, solutions, origin, destination, date);
+        res.json(flights);
     }
-    catch(err){
-    res.status(500).send(err);
+    catch (err) {
+        res.status(500).send(err);
     }
 });
 

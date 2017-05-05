@@ -9,7 +9,6 @@ const static = express.static(__dirname + '/public');
 const session = require('express-session')
 const passport = require('passport')
 var flash = require("connect-flash");
-app.use(flash());
 const exphbs = require('express-handlebars');
 const Handlebars = require('handlebars');
 // //wkhtmlpdf
@@ -58,9 +57,10 @@ app.engine('handlebars', handlebarsInstance.engine);
 app.set('view engine', 'handlebars');
 
 //Passport
-app.use(session({ secret: 'keyboard cat' }));
+app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 configRoutes(app);
 
