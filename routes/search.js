@@ -5,35 +5,41 @@ const userData = data.users;
 const flightData = data.flights;
 const aviationJson = require("aviation-json");
 
-let airlineInfo = null;
-
-if(!airlineInfo){
-    // Get all airlines info
-    airlineInfo = aviationJson.airlines;
-    console.log(airlineInfo);
-}
+let airlineInfo = aviationJson.airlines;
 
 router.get("/", (req, res) => {
-    if(req.user)
-    res.render("search",{});
+    if (req.user)
+        res.render("search", {});
     else
-    res.redirect("/login");
+        res.redirect("/login");
 });
 
-router.post('/', async (req,res)=>{
-    let adultCount = req.body.adultCount;
-    let maxPrice = req.body.maxPrice;
-    let solutions = "20";
-    let origin = req.body.origin;
-    let destination = req.body.destination;
-    let date = req.body.date;
+router.get("/airlines", (req, res) => {
+    res.json(airlineInfo);
+});
 
-    try{
-    let flights = await flightData.searchFlights(adultCount, maxPrice, solutions, origin, destination, date);
-    res.json(flights);
+router.post('/', async (req, res) => {
+    let adultCount = req.body.query.adultCount;
+    let maxPrice = "USD" + req.body.query.maxPrice;
+    let solutions = "20";
+    let origin = req.body.query.origin;
+    let destination = req.body.query.destination;
+    let date = req.body.query.date;
+
+    try {
+        let flights = await flightData.searchFlights(adultCount, maxPrice, solutions, origin, destination, date);
+        // flights.forEach(function (flight,index) {
+        //     for (let airline in airlineInfo) {
+        //         if(airlineInfo[airline].IATA == flight.airlineCode){
+        //             flights[index].airlineName = airlineInfo[airline].name;
+        //             flights[index].airlineLogo = airlineInfo[airline].logoLink;
+        //         }
+        //     }
+        // }, this);
+        res.json(flights);
     }
-    catch(err){
-    res.status(500).send(err);
+    catch (err) {
+        res.status(500).send(err);
     }
 });
 
