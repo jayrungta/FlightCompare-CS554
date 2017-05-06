@@ -14,6 +14,12 @@ body {
   border: none;
   box-shadow: none; }
 
+.panel-error {
+  background: rgba(168, 37, 30, 0.5);
+  color: #FFFFFF;
+  border: none;
+  box-shadow: none; }
+
 legend, h1, .listInfo, help {
   color: #FFFFFF; }
 

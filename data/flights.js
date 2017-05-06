@@ -39,10 +39,8 @@ module.exports = {
 
                 if (body.error) {
                     console.error(body.error);
-                    reject(body.error);
+                    reject("You have made a bad request, try again.");
                 }
-
-
 
                 try {
                     let getName = (code) => {
@@ -88,13 +86,13 @@ module.exports = {
                         flights.push(jsonObject);
                     }
                 } catch (e) {
-                    reject('No flights!');
+                    reject('No flights found for this search');
                 }
 
                 if (flights.length > 0) {
                     resolve(flights);
                 } else {
-                    reject('No flights!');
+                    reject('No flights found for this search!');
                 }
             });
         });
