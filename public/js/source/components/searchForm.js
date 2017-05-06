@@ -23,20 +23,24 @@ const SearchForm = React.createClass({
             this.state.query.maxPrice = value;
         };
 
-        $('#maxPrice').slider({
+        $('#maxPrice').bootstrapSlider({
             formatter: function (value) {
                 setMaxPrice(value);
                 $('#maxPriceDisp').text("$" + value);
                 return 'Max Price: $' + value;
             }
         });
-
     },
 
     onSearch(event) {
         event.preventDefault();
         this.setState({ errors: "", errorFlag: false });
-        let newQuery = { origin: this.state.query.origin, destination: this.state.query.destination, date: this.state.query.ddate, adultCount: this.state.query.adultCount, maxPrice: this.state.query.maxPrice };
+        let date;
+        if (this.state.ddate)
+            date = this.state.ddate;
+        else
+            date = $("#ddate").val();
+        let newQuery = { origin: this.state.query.origin, destination: this.state.query.destination, date: date, adultCount: this.state.query.adultCount, maxPrice: this.state.query.maxPrice };
         $.ajax({
             type: "POST",
             url: "/search",
@@ -54,6 +58,7 @@ const SearchForm = React.createClass({
         const field = event.target.name;
         const query = this.state.query;
         query[field] = event.target.value;
+
         this.setState({
             query: query
         });
@@ -68,21 +73,21 @@ const SearchForm = React.createClass({
                             <fieldset />
                             <legend>Search Flights</legend>
                             <div className="row">
-                                <div className="form-group inputDiv col-md-4" style = {{"margin-left":"10px"}}>
+                                <div className="form-group inputDiv col-md-4" style={{ "margin-left": "10px" }}>
                                     <label className="control-label" for="origin">Origin</label>
                                     <input id="origin" name="origin" type="text" placeholder="Where are you flying from?" className="form-control input-md" required="" onChange={this.onChange} value={this.state.query.origin} />
                                 </div>
-                                <div className="form-group inputDiv col-md-4" style = {{"margin-left":"10px"}}>
+                                <div className="form-group inputDiv col-md-4" style={{ "margin-left": "10px" }}>
                                     <label className="control-label" for="destination">Destination</label>
                                     <input id="destination" name="destination" type="text" placeholder="Where are you flying to?" className="form-control input-md" required="" onChange={this.onChange} value={this.state.query.destination} />
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="form-group inputDiv col-md-4 " style = {{"margin-left":"10px"}}>
+                                <div className="form-group inputDiv col-md-4 " style={{ "margin-left": "10px" }}>
                                     <label className="control-label" for="ddate">Departure Date</label>
                                     <input id="ddate" name="ddate" type="date" placeholder="Select departure date" className="form-control input-md" required="" onChange={this.onChange} value={this.state.query.ddate} />
                                 </div>
-                                <div className="form-group inputDiv col-md-2" style = {{"margin-left":"10px"}}>
+                                <div className="form-group inputDiv col-md-2" style={{ "margin-left": "10px" }}>
                                     <label className="control-label" for="adultCount">No. of Adults</label>
                                     <select id="adultCount" name="adultCount" className="form-control" onChange={this.onChange} value={this.state.query.adultCount}>
                                         <option value="1">1</option>
@@ -95,14 +100,14 @@ const SearchForm = React.createClass({
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="form-group inputDiv col-md-4 " style = {{"margin-left":"20px"}}>
+                                <div className="form-group inputDiv col-md-4 " style={{ "margin-left": "20px" }}>
                                     <label className="control-label" for="maxPrice">Max Price</label>
                                     <input id="maxPrice" name="maxPrice" data-slider-id='maxPrice' type="text" data-slider-min="0" data-slider-max="1000" data-slider-step="1" data-slider-value="0" className="form-control input-md" onChange={this.onChange} value={this.state.query.origin} />
                                     <help className="maxPriceDisp" id="maxPriceDisp" name="maxPriceDisp"></help>
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="form-group inputDiv col-md-4" style = {{"margin-left":"10px"}}>
+                                <div className="form-group inputDiv col-md-4" style={{ "margin-left": "10px" }}>
                                     <input className="btn btn-default" type="submit" value="Search" />
                                 </div>
                             </div>

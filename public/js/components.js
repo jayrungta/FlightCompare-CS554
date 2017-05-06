@@ -522,7 +522,7 @@ var SearchForm = React.createClass({
             _this.state.query.maxPrice = value;
         };
 
-        $('#maxPrice').slider({
+        $('#maxPrice').bootstrapSlider({
             formatter: function formatter(value) {
                 setMaxPrice(value);
                 $('#maxPriceDisp').text("$" + value);
@@ -535,7 +535,9 @@ var SearchForm = React.createClass({
 
         event.preventDefault();
         this.setState({ errors: "", errorFlag: false });
-        var newQuery = { origin: this.state.query.origin, destination: this.state.query.destination, date: this.state.query.ddate, adultCount: this.state.query.adultCount, maxPrice: this.state.query.maxPrice };
+        var date = void 0;
+        if (this.state.ddate) date = this.state.ddate;else date = $("#ddate").val();
+        var newQuery = { origin: this.state.query.origin, destination: this.state.query.destination, date: date, adultCount: this.state.query.adultCount, maxPrice: this.state.query.maxPrice };
         $.ajax({
             type: "POST",
             url: "/search",
@@ -553,6 +555,7 @@ var SearchForm = React.createClass({
         var field = event.target.name;
         var query = this.state.query;
         query[field] = event.target.value;
+
         this.setState({
             query: query
         });
@@ -692,3 +695,64 @@ var SearchForm = React.createClass({
     }
 });
 ReactDOM.render(React.createElement(SearchForm, null), document.getElementById('search'));
+"use strict";
+/*import React, { Component } from 'react';
+import CommentList from './CommentList';
+import CommentForm from './CommentForm';
+import $ from 'jquery';
+
+class CommentBox extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { data: [] };
+    }
+
+    loadCommentsFromServer() {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            cache: false,
+            success: (data) => { this.props.actions.showComments(data); },
+            error: (xhr, status, err) => {
+                console.error(this.props.url, status, err.toString());
+            }
+        });
+    }
+
+    handleCommentSubmit(comment) {
+        const comments = this.state.data;
+        comment.id = Date.now();
+        this.props.actions.addComment(comment);
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            type: 'POST',
+            data: comment,
+            success: (data) => { this.props.actions.showComments(data); },
+            error: (xhr, status, err) => {
+                this.props.actions.showComments(comments)
+                console.error(this.props.url, status, err.toString());
+            }
+        });
+    }
+
+    componentDidMount() {
+        this.loadCommentsFromServer();
+        setInterval(this.loadCommentsFromServer.bind(this), this.props.pollInterval);
+    }
+
+    render() {
+        return (
+            <div className="commentBox">
+                <h1>Comments</h1>
+                <CommentList data={this.props.data} />
+                <CommentForm onCommentSubmit={this.handleCommentSubmit.bind(this)} />
+            </div>
+        );
+    }
+}
+
+export default CommentBox*/
+"use strict";
+"use strict";
+"use strict";
