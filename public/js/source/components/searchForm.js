@@ -66,29 +66,29 @@ const SearchForm = React.createClass({
     render() {
         return (
             // <p>Search flight form coming soon!</p>
-            <div className="searchContainer ">
-                <div className="panel panel-default">
+            <div className="searchContainer">
+                <div className="searchPanel panel panel-default col-xs-8 ">
                     <div className="panel-body">
                         <form onSubmit={this.onSearch} className="form-horizontal col-xs-12 searchForm">
                             <fieldset />
                             <legend>Search Flights</legend>
                             <div className="row">
                                 <div className="form-group inputDiv col-md-4" style={{ "margin-left": "10px" }}>
-                                    <label className="control-label" for="origin">Origin</label>
+                                    <label className="control-label" htmlFor="origin">Origin</label>
                                     <input id="origin" name="origin" type="text" placeholder="Where are you flying from?" className="form-control input-md" required="" onChange={this.onChange} value={this.state.query.origin} />
                                 </div>
                                 <div className="form-group inputDiv col-md-4" style={{ "margin-left": "10px" }}>
-                                    <label className="control-label" for="destination">Destination</label>
+                                    <label className="control-label" htmlFor="destination">Destination</label>
                                     <input id="destination" name="destination" type="text" placeholder="Where are you flying to?" className="form-control input-md" required="" onChange={this.onChange} value={this.state.query.destination} />
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="form-group inputDiv col-md-4 " style={{ "margin-left": "10px" }}>
-                                    <label className="control-label" for="ddate">Departure Date</label>
+                                    <label className="control-label" htmlFor="ddate">Departure Date</label>
                                     <input id="ddate" name="ddate" type="date" placeholder="Select departure date" className="form-control input-md" required="" onChange={this.onChange} value={this.state.query.ddate} />
                                 </div>
-                                <div className="form-group inputDiv col-md-2" style={{ "margin-left": "10px" }}>
-                                    <label className="control-label" for="adultCount">No. of Adults</label>
+                                <div className="form-group inputDiv col-md-3" style={{ "margin-left": "10px" }}>
+                                    <label className="control-label" htmlFor="adultCount">No. of Adults</label>
                                     <select id="adultCount" name="adultCount" className="form-control" onChange={this.onChange} value={this.state.query.adultCount}>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -100,9 +100,10 @@ const SearchForm = React.createClass({
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="form-group inputDiv col-md-4 " style={{ "margin-left": "20px" }}>
-                                    <label className="control-label" for="maxPrice">Max Price</label>
+                                <div className="form-group inputDiv col-md-4 " style={{ "margin-left": "10px" }}>
+                                    <label className="control-label" htmlFor="maxPrice">Max Price</label>
                                     <input id="maxPrice" name="maxPrice" data-slider-id='maxPrice' type="text" data-slider-min="0" data-slider-max="1000" data-slider-step="1" data-slider-value="0" className="form-control input-md" onChange={this.onChange} value={this.state.query.origin} />
+                                    <br/>
                                     <help className="maxPriceDisp" id="maxPriceDisp" name="maxPriceDisp"></help>
                                 </div>
                             </div>
@@ -114,6 +115,7 @@ const SearchForm = React.createClass({
                         </form>
                     </div>
                 </div>
+ 
                 <SearchResults results={this.state.results} />
             </div>
         );

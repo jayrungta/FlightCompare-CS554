@@ -172,17 +172,19 @@ const LoginForm = React.createClass({
                                         <div className="front signin_form">
                                             <p>Login To Your Account</p>
                                             <form onSubmit={this.onLogin} className="login-form">
+                                                <label className="control-label" htmlFor="username">Username:</label>
                                                 <div className="form-group">
                                                     <div className="input-group">
-                                                        <input type="text" className="form-control" placeholder="Type your username" name="username" onChange={this.onChange} value={this.state.user.username} required="true" />
+                                                        <input type="text" className="form-control" placeholder="Type your username" name="username" id="username"onChange={this.onChange} value={this.state.user.username} required="true" />
                                                         <span className="input-group-addon">
                                                             <i className="glyphicon glyphicon-user"></i>
                                                         </span>
                                                     </div>
                                                 </div>
+                                                <label className="control-label" htmlFor="password">Password:</label>
                                                 <div className="form-group">
                                                     <div className="input-group">
-                                                        <input type="password" className="form-control" placeholder="Type your password" name="password" onChange={this.onChange} value={this.state.user.password} required="true" />
+                                                        <input type="password" className="form-control" placeholder="Type your password" name="password" id="password" onChange={this.onChange} value={this.state.user.password} required="true" />
                                                         <span className="input-group-addon">
                                                             <i className="glyphicon glyphicon-lock"></i>
                                                         </span>
@@ -197,22 +199,25 @@ const LoginForm = React.createClass({
                                         <div className="back signup_form" style={{ opacity: 0 }}>
                                             <p>Sign Up for Your New Account</p>
                                             <form form action="/login" onSubmit={this.onRegister} className="login-form">
+                                                <label className="control-label" htmlFor="firstname">First Name:</label>
                                                 <div className="form-group">
                                                     <div className="input-group">
-                                                        <input type="text" className="form-control" placeholder="First Name" name="firstname" onChange={this.onChange} value={this.state.user.firstname} required="true" />
+                                                        <input type="text" className="form-control" placeholder="First Name" name="firstname" id="firstname" onChange={this.onChange} value={this.state.user.firstname} required="true" />
                                                         <span className="input-group-addon">
                                                             <i className="glyphicon glyphicon-user"></i>
                                                         </span>
                                                     </div>
                                                 </div>
+                                                <label className="control-label" htmlFor="lastname">Last Name:</label>
                                                 <div className="form-group">
                                                     <div className="input-group">
-                                                        <input type="text" className="form-control" placeholder="Last Name" name="lastname" onChange={this.onChange} value={this.state.user.lastname} required="true" />
+                                                        <input type="text" className="form-control" placeholder="Last Name" name="lastname" id="lastname" onChange={this.onChange} value={this.state.user.lastname} required="true" />
                                                         <span className="input-group-addon">
                                                             <i className="glyphicon glyphicon-user"></i>
                                                         </span>
                                                     </div>
                                                 </div>
+                                                <label className="control-label" htmlFor="username">Username:</label>
                                                 <div className="form-group">
                                                     <div className="input-group">
                                                         <input type="text" className="form-control" placeholder="Username" name="username" id="username" onChange={this.onChange} value={this.state.user.username} required="true" />
@@ -221,22 +226,25 @@ const LoginForm = React.createClass({
                                                         </span>
                                                     </div>
                                                 </div>
+                                                <label className="control-label" htmlFor="email">Email:</label>
                                                 <div className="form-group">
                                                     <div className="input-group">
-                                                        <input type="email" className="form-control" placeholder="Email" name="email" onChange={this.onChange} value={this.state.user.email} required="true" />
+                                                        <input type="email" className="form-control" placeholder="Email" name="email" id="email" onChange={this.onChange} value={this.state.user.email} required="true" />
                                                         <span className="input-group-addon">
                                                             <i className="glyphicon glyphicon-envelope"></i>
                                                         </span>
                                                     </div>
                                                 </div>
+                                                <label className="control-label" htmlFor="password">Password:</label>
                                                 <div className="form-group">
                                                     <div className="input-group">
-                                                        <input type="password" className="form-control" placeholder="Password" name="password" onChange={this.onChange} value={this.state.user.password} required="true" />
+                                                        <input type="password" className="form-control" placeholder="Password" name="password" id="password" onChange={this.onChange} value={this.state.user.password} required="true" />
                                                         <span className="input-group-addon">
                                                             <i className="glyphicon glyphicon-lock"></i>
                                                         </span>
                                                     </div>
                                                 </div>
+                                                <label className="control-label" htmlFor="confirmpassword">Confirm Password:</label>
                                                 <div className="form-group">
                                                     <div className="input-group">
                                                         <input type="password" className="form-control" placeholder="Confirm Password" name="confirmpassword" id="confirmpassword" onChange={this.onChange} value={this.state.user.confirmpassword} required="true" />
