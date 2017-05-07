@@ -427,17 +427,13 @@ var LoginForm = React.createClass({
 ReactDOM.render(React.createElement(LoginForm, null), document.getElementById('content'));
 'use strict';
 
-var SearchResults = React.createClass({
-    displayName: 'SearchResults',
+var ResultItem = React.createClass({
+    displayName: 'ResultItem',
     getInitialState: function getInitialState() {
         return {
-            results: []
+            expanded: false,
+            buttonText: 'Show Details'
         };
-    },
-    componentWillMount: function componentWillMount() {},
-    componentDidMount: function componentDidMount() {},
-    componentWillReceiveProps: function componentWillReceiveProps(newProps) {
-        this.setState({ results: newProps.results });
     },
     formatAMPM: function formatAMPM(date) {
         var hours = date.getHours();
@@ -458,92 +454,245 @@ var SearchResults = React.createClass({
             return hours + "h " + minutes + "m";
         }
     },
-    render: function render() {
-        var _this = this;
 
-        var resultList = this.state.results;
-        var results = resultList.map(function (result) {
+    toggleExpanded: function toggleExpanded() {
+        var bt = this.state.buttonText == 'Hide Details' ? 'Show Details' : 'Hide Details';
+        var e = !this.state.expanded;
+        this.setState({
+            expanded: e,
+            buttonText: bt
+        });
+    },
+    doPrint: function doPrint() {
+        alert('Print');
+    },
+    doTrack: function doTrack() {
+        alert('Track');
+    },
+    doBook: function doBook() {
+        alert('Book');
+    },
+    getExpandedDiv: function getExpandedDiv() {
+        // i think here we should call <CommentBox flightNo = {this.props.flightNo}>
+        if (this.state.expanded) {
             return React.createElement(
                 'div',
-                { className: 'panel panel-default' },
+                null,
+                React.createElement('br', null),
                 React.createElement(
                     'div',
-                    { className: 'panel-heading' },
+                    { className: 'row' },
                     React.createElement(
                         'div',
-                        { className: 'row' },
+                        { className: 'col-md-4' },
                         React.createElement(
-                            'div',
-                            { className: 'airline col-xs-6' },
+                            'dl',
+                            { className: 'dl-horizontal' },
                             React.createElement(
-                                'p',
+                                'dt',
                                 null,
-                                result.airlineName,
-                                '     (',
-                                result.origin,
-                                '-',
-                                result.destination,
-                                ')'
+                                'Flight Number'
+                            ),
+                            React.createElement(
+                                'dd',
+                                null,
+                                this.props.flightNo
+                            ),
+                            React.createElement(
+                                'dt',
+                                null,
+                                'Origin'
+                            ),
+                            React.createElement(
+                                'dd',
+                                null,
+                                this.props.originName
+                            ),
+                            React.createElement(
+                                'dt',
+                                null,
+                                'Destination'
+                            ),
+                            React.createElement(
+                                'dd',
+                                null,
+                                this.props.destinationName
+                            ),
+                            React.createElement(
+                                'dt',
+                                null,
+                                'Origin Terminal'
+                            ),
+                            React.createElement(
+                                'dd',
+                                null,
+                                this.props.originTerminal
+                            ),
+                            React.createElement(
+                                'dt',
+                                null,
+                                'Meal'
+                            ),
+                            React.createElement(
+                                'dd',
+                                null,
+                                this.props.meal
                             )
                         )
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'col-md-4' },
+                        'comments goes here.',
+                        React.createElement(CommentBox, { flightNo: this.props.flightNo })
                     )
                 ),
                 React.createElement(
                     'div',
-                    { className: 'panel-body' },
+                    { className: 'row' },
                     React.createElement(
                         'div',
-                        { className: 'listInfo row' },
+                        { className: 'col-md-12' },
                         React.createElement(
-                            'div',
-                            { className: 'price col-xs-4' },
-                            React.createElement(
-                                'p',
-                                { style: { "font-weight": "bold" } },
-                                '$',
-                                result.price.substring(3).toLocaleString('USD', {
-                                    style: 'currency',
-                                    currency: "USD",
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                })
-                            )
+                            'a',
+                            { className: 'btn btn-default', onClick: this.doPrint },
+                            'Print'
                         ),
+                        '\xA0',
                         React.createElement(
-                            'div',
-                            { className: 'time col-xs-4' },
-                            React.createElement(
-                                'p',
-                                null,
-                                _this.formatAMPM(new Date(result.departureTime)),
-                                ' - ',
-                                _this.formatAMPM(new Date(result.arrivalTime))
-                            )
+                            'a',
+                            { className: 'btn btn-default', onClick: this.doTrack },
+                            'Track'
                         ),
+                        '\xA0',
                         React.createElement(
-                            'div',
-                            { className: 'price col-xs-4' },
-                            React.createElement(
-                                'p',
-                                null,
-                                _this.formatDuration(result.duration)
-                            )
+                            'a',
+                            { className: 'btn btn-default', onClick: this.doBook },
+                            'Book'
                         )
                     )
                 )
             );
-        });
-        // if (!results) {
-        //     results = " ";
-        // }
+        } else {
+            return null;
+        }
+    },
+    render: function render() {
+        var expandedDiv = this.getExpandedDiv();
         return React.createElement(
             'div',
-            { className: 'searchResults col-xs-12 ' },
-            React.createElement('fieldset', null),
+            { className: 'panel panel-default' },
             React.createElement(
-                'legend',
+                'div',
+                { className: 'panel-heading' },
+                React.createElement(
+                    'div',
+                    { className: 'row' },
+                    React.createElement(
+                        'div',
+                        { className: 'airline col-xs-6' },
+                        React.createElement(
+                            'p',
+                            null,
+                            this.props.airlineName,
+                            ' (',
+                            this.props.origin,
+                            '-',
+                            this.props.destination,
+                            ')'
+                        )
+                    )
+                )
+            ),
+            React.createElement(
+                'div',
+                { className: 'panel-body' },
+                React.createElement(
+                    'div',
+                    { className: 'listInfo row' },
+                    React.createElement(
+                        'div',
+                        { className: 'price col-xs-4' },
+                        React.createElement(
+                            'p',
+                            { style: { "font-weight": "bold" } },
+                            '$',
+                            this.props.price
+                        )
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'time col-xs-4' },
+                        React.createElement(
+                            'p',
+                            null,
+                            this.formatAMPM(new Date(this.props.departureTime)),
+                            ' - ',
+                            this.formatAMPM(new Date(this.props.arrivalTime))
+                        )
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'price col-xs-4' },
+                        React.createElement(
+                            'p',
+                            null,
+                            this.formatDuration(this.props.duration)
+                        )
+                    )
+                ),
+                React.createElement(
+                    'a',
+                    { className: 'btn btn-default', onClick: this.toggleExpanded },
+                    this.state.buttonText
+                ),
+                expandedDiv
+            )
+        );
+    }
+});
+"use strict";
+
+var SearchResults = React.createClass({
+    displayName: "SearchResults",
+    getInitialState: function getInitialState() {
+        return {
+            results: [],
+            expanded: false,
+            buttonText: 'Show Details'
+        };
+    },
+    componentWillMount: function componentWillMount() {},
+    componentDidMount: function componentDidMount() {},
+    componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+        this.setState({ results: newProps.results });
+    },
+    render: function render() {
+        var resultList = this.state.results;
+        var results = resultList.map(function (result) {
+            return React.createElement(ResultItem, {
+                airlineName: result.airlineName,
+                origin: result.origin,
+                destination: result.destination,
+                price: result.price,
+                departureTime: result.departureTime,
+                arrivalTime: result.arrivalTime,
+                duration: result.duration,
+                flightNo: result.flightNo,
+                meal: result.meal,
+                originName: result.originName,
+                destinationName: result.destinationName,
+                originTerminal: result.originTerminal
+            });
+        });
+        return React.createElement(
+            "div",
+            { className: "searchResults col-xs-12 " },
+            React.createElement("fieldset", null),
+            React.createElement(
+                "legend",
                 null,
-                'Results'
+                "Results"
             ),
             results
         );
@@ -760,6 +909,8 @@ var SearchForm = React.createClass({
 });
 ReactDOM.render(React.createElement(SearchForm, null), document.getElementById('search'));
 "use strict";
+"use strict";
+
 /*import React, { Component } from 'react';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
@@ -817,6 +968,17 @@ class CommentBox extends Component {
 }
 
 export default CommentBox*/
-"use strict";
+
+var CommentBox = React.createClass({
+    displayName: "CommentBox",
+    render: function render() {
+        return React.createElement(
+            "div",
+            { className: "" },
+            "comment box ",
+            this.props.flightNo
+        );
+    }
+});
 "use strict";
 "use strict";
