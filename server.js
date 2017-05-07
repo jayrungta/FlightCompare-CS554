@@ -3,26 +3,21 @@ const expressSession = require('express-session');
 const bcrypt = require('bcrypt-nodejs');
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
-const passport = require('passport');
 const configRoutes = require("./routes");
 const app = express();
 const static = express.static(__dirname + '/public');
-
-const expressSanitizer  = require("express-sanitizer");
-const session           = require('express-session');
-const flash             = require('connect-flash');
-const methodOverride    = require("method-override");
+const session = require('express-session')
+const passport = require('passport')
+var flash = require("connect-flash");
 const exphbs = require('express-handlebars');
 const Handlebars = require('handlebars');
+// //wkhtmlpdf
+// const wkhtmlpdf = require('wkhtmlpdf');
+// const fs = require('fs');
 
-//wkhtmlpdf
-//const wkhtmlpdf = require('wkhtmlpdf');
-//const fs = require('fs');
-
-// URL      get the pdf file
-//wkhtmltopdf('http://localhost:3000/recipes', { pageSize: 'letter' })
-//  .pipe(fs.createWriteStream('out.pdf'));
-
+// // URL      get the pdf file
+// wkhtmltopdf('http://localhost:3000/recipes', { pageSize: 'letter' })
+//   .pipe(fs.createWriteStream('out.pdf'));
 
 const handlebarsInstance = exphbs.create({
     defaultLayout: 'main',
@@ -34,31 +29,38 @@ const handlebarsInstance = exphbs.create({
 
             return new Handlebars.SafeString(JSON.stringify(obj));
         }
-    }
+    },
+    partialsDir: [
+        'views/partials/'
+    ]
 });
+
+const rewriteUnsupportedBrowserMethods = (req, res, next) => {
+    // If the user posts to the server with a property called _method, rewrite the request's method
+    // To be that method; so if they post _method=PUT you can now allow browsers to POST to a route that gets
+    // rewritten in this middleware to a PUT route
+    if (req.body && req.body._method) {
+        req.method = req.body._method;
+        delete req.body._method;
+    }
+
+    // let the next middleware run:
+    next();
+};
 
 app.use("/public", static);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(methodOverride("_method"));
-app.use(expressSanitizer());
-app.use(cookieParser());
+app.engine('handlebars', handlebarsInstance.engine);
+app.set('view engine', 'handlebars');
 
-
-app.use(session({ secret: 'a',
-                  resave: false,
-                  saveUninitialized: false }));
+//Passport
+app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-
-
-require('./routes/init')(passport);//passport configuration file
-require('./routes/index.js')(app, passport);
-app.engine('handlebars', handlebarsInstance.engine);
-app.set('view engine', 'handlebars');
 
 configRoutes(app);
 

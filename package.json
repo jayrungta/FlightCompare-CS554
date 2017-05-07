@@ -2,9 +2,10 @@
   "name": "flight-compare-cs554",
   "version": "1.0.0",
   "description": "cs554 final project",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test.js",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -16,26 +17,34 @@
     "url": "https://github.com/jayrungta/FlightCompare-CS554/issues"
   },
   "homepage": "https://github.com/jayrungta/FlightCompare-CS554#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-clean-css": "^2.0.12",
+    "gulp-concat": "^2.6.0",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^1.6.0"
+  },
   "dependencies": {
+    "aviation-json": "^0.3.1",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.1",
+    "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
+    "express-handlebars": "^3.0.0",
     "express-session": "^1.15.2",
+    "handlebars": "^4.0.5",
     "mongodb": "^2.2.25",
+    "node-redis-pubsub": "^1.0.2",
     "node-uuid": "^1.4.8",
     "nodemailer": "^4.0.1",
-    "xss": "^0.3.3",
-    "wkhtmltopdf": "^0.3.4",
-    "connect-flash": "^0.1.1",
-    "express-handlebars": "^3.0.0",
-    "handlebars": "^4.0.5",
-    "express-sanitizer": "^1.0.1",
-    "express-session": "^1.14.2",
-    "method-override": "^2.3.7",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "request": "^2.79.0",
-    "sanitizer": "^0.1.3"
+    "wkhtmltopdf": "^0.3.4",
+    "xss": "^0.3.3"
   }
 }

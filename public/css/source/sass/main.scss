@@ -1,0 +1,20 @@
+$body-background: #FEFEFE;
+$primary-color: #333;
+
+$primary-font-size: 20pt;
+$p-font-size: 12pt;
+
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    background: $body-background;
+    color: $primary-color;
+
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+    font-size: $primary-font-size;
+}
+p {
+    font-size: $p-font-size;
+}
