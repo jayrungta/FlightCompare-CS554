@@ -1,7 +1,5 @@
-const {posts} = require("../dbconfig/MongoCollections.js");
-const users = require("./users");
+const nrpSender = require("./nrp-sender");
 const uuid = require('node-uuid');
-const xss = require('xss');
 
 module.exports = {
     /**
@@ -13,23 +11,12 @@ module.exports = {
      * @throws Will throw an error if user not found.
      */
     addPost: async (post) => {
-        let postsCollection = await posts();
-        let user = await users.getUserById(post.userId);
-
-        // TODO: add more info
-        let newPost = {
-            _id: uuid.v4(),
-            user: {
-                id: post.userId,
-                name: `${user.profile.firstName} ${user.profile.lastName}`
-            },
-            flight: {
-                id: post.flightId
-            },
-            text: xss(post.text)
-        };
-        let insertedPost = await postsCollection.insertOne(newPost);
-        return insertedPost.insertedId;
+        return await nrpSender.sendMessage({
+            id: uuid.v4(),
+            collection: "posts",
+            operation: "addPost",
+            params: { post }
+        });
     },
 
     /**
@@ -37,11 +24,12 @@ module.exports = {
      * @throws Will throw an error if delete fails.
      */
     deletePost: async (id) => {
-        let postsCollection = await posts();
-        let deletedPost = await postsCollection.deleteOne({ _id: id });
-        if (deletedPost.deletedCount === 0)
-            throw (`Failed to delete post with id ${id}.`);
-        return id;
+        return await nrpSender.sendMessage({
+            id: uuid.v4(),
+            collection: "posts",
+            operation: "deletePost",
+            params: { id }
+        });
     },
 
     /**
@@ -49,28 +37,35 @@ module.exports = {
      * @throws Will throw an error if post not found.
      */
     getPostById: async (id) => {
-        let postsCollection = await posts();
-        let post = await postsCollection.findOne({ _id: id });
-        if (!post)
-            throw ("Post not found.");
-        return post;
+        return await nrpSender.sendMessage({
+            id: uuid.v4(),
+            collection: "posts",
+            operation: "getPostById",
+            params: { id }
+        });
     },
 
     /**
      * @returns {Object[]} postsOfUser
      */
     getPostsByUser: async (userId) => {
-        let postsCollection = await posts();
-        let postsOfUser = await postsCollection.find({ 'user.id': userId }).toArray();
-        return postsOfUser;
+        return await nrpSender.sendMessage({
+            id: uuid.v4(),
+            collection: "posts",
+            operation: "getPostsByUser",
+            params: { userId }
+        });
     },
 
     /**
      * @returns {Object[]} postsOfFlight
      */
     getPostsByFlight: async (flightId) => {
-        let postsCollection = await posts();
-        let postsOfFlight = await postsCollection.find({ 'flight.id': flightId }).toArray();
-        return postsOfFlight;
+        return await nrpSender.sendMessage({
+            id: uuid.v4(),
+            collection: "posts",
+            operation: "getPostsByFlight",
+            params: { flightId }
+        });
     }
 }

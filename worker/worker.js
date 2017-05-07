@@ -56,3 +56,17 @@ redisConnection.on("flights:request:*", async (message) => {
         redisConnection.emit(failedEvent, { data: error });
     };
 });
+
+redisConnection.on("notifications:request:*", async (message) => {
+    let { id, collection, operation, params} = message;
+
+    try {
+        let result = await notifications[operation](params);
+
+        let successEvent = `${collection}:success:${id}`;
+        redisConnection.emit(successEvent, { data: result });
+    } catch (error) {
+        let failedEvent = `${collection}:failed:${id}`;
+        redisConnection.emit(failedEvent, { data: error });
+    };
+});

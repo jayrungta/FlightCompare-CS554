@@ -8,7 +8,9 @@ module.exports = {
      * @returns flights - Returns a list of flights.
      * @throws Will throw an error if request has an error or no flights found.
      */
-    searchFlights(adultCount, maxPrice, solutions, origin, destination, date) {
+    searchFlights(params) {
+        let { adultCount, maxPrice, solutions, origin, destination, date } = params;
+
         return new Promise((resolve, reject) => {
             let data = {
                 "request": {
@@ -96,5 +98,5 @@ module.exports = {
                 }
             });
         });
-    },
+    }
 }
