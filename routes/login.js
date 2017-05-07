@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const data = require("../data");
 const userData = data.users;
-var passport = require('passport')
-    , LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
 passport.use(new LocalStrategy(
     async function (username, password, done) {
