@@ -55,3 +55,14 @@ class CommentBox extends Component {
 }
 
 export default CommentBox*/
+
+
+const CommentBox = React.createClass({
+    render() {
+        return (
+            <div className="">
+                comment box {this.props.flightNo}
+            </div>
+        );
+    }
+});
