@@ -126,9 +126,6 @@ a:hover, a:focus {
     width: 180px;
 }
 
-.login .sign-btn a {
-    text-decoration: none;
-}
 
 .login .checkbox {
     margin-top: 20px;

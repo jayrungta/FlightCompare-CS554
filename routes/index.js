@@ -1,13 +1,9 @@
-const loginRoutes = require("./login");
 const data = require("../data");
 const userData = data.users;
 const loginRoutes = require("./login");
 const searchRoutes = require("./search");
 
 const constructorMethod = (app) => {
-    app.get("/", (req, res) => {
-        res.redirect("/search");
-    });
     
     app.get("/users", async (req, res) => {
         let users = await userData.getAllUsers();
@@ -18,8 +14,9 @@ const constructorMethod = (app) => {
 
     app.use("/search", searchRoutes);
 
-    //routes for login
-    app.get("/login", loginRoutes);
+    app.get("/", (req, res) => {
+        res.redirect("/search");
+    });
 
     app.use("*", (req, res) => {
         res.sendStatus(404);

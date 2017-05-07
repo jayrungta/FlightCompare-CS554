@@ -1,32 +1,29 @@
-const {users} = require("../dbconfig/MongoCollections.js");
+const nrpSender = require("./nrp-sender");
 const uuid = require('node-uuid');
-const bcrypt = require('bcrypt-nodejs');
-const xss = require('xss');
 
 module.exports = {
     /**
      * @returns id - Id of the newly added user.
      */
     addUser: async (user) => {
-        let newUser = {
-            _id: uuid.v4(),
-            username: xss(user.username),
-            password: bcrypt.hashSync(user.password),
-            profile: {
-                firstName: xss(user.firstName),
-                lastName: xss(user.lastName),
-                email: xss(user.email)
-            }
-        };
-
-        let usersCollection = await users();
-        let insertedUser = await usersCollection.insertOne(newUser);
-        return insertedUser.insertedId;
+        return await nrpSender.sendMessage({
+            id: uuid.v4(),
+            collection: "users",
+            operation: "addUser",
+            params: { user }
+        });
     },
 
-    // TODO: add more
+    /**
+     * @returns id - Id of the newly updated user.
+     */
     updateUser: async (id, newUserData) => {
-        return newUserData;
+        return await nrpSender.sendMessage({
+            id: uuid.v4(),
+            collection: "users",
+            operation: "updateUser",
+            params: { id, newUserData }
+        });
     },
 
     /**
@@ -34,11 +31,12 @@ module.exports = {
      * @throws Will throw an error if delete fails.
      */
     deleteUser: async (id) => {
-        let usersCollection = await users();
-        let deletedUser = await usersCollection.deleteOne({ _id: id });
-        if (deletedUser.deletedCount === 0)
-            throw (`Failed to delete user with id ${id}.`);
-        return id;
+        return await nrpSender.sendMessage({
+            id: uuid.v4(),
+            collection: "users",
+            operation: "deleteUser",
+            params: { id }
+        });
     },
 
     /**
@@ -46,26 +44,33 @@ module.exports = {
      * @throws Will throw an error if user not found.
      */
     getUserById: async (id) => {
-        let usersCollection = await users();
-        let user = await usersCollection.findOne({ _id: id });
-        if (!user)
-            throw ("User not found.");
-        return user;
+        return await nrpSender.sendMessage({
+            id: uuid.v4(),
+            collection: "users",
+            operation: "getUserById",
+            params: { id }
+        });
     },
 
     getUsersByFlight: async (flightId) => {
-        let usersCollection = await users();
-        let allUsers = await usersCollection.find({}).toArray();
-        return allUsers;
+        return await nrpSender.sendMessage({
+            id: uuid.v4(),
+            collection: "users",
+            operation: "getUsersByFlight",
+            params: { flightId }
+        });
     },
 
     /**
      * @returns {Object[]} allUsers
      */
     getAllUsers: async () => {
-        let usersCollection = await users();
-        let allUsers = await usersCollection.find({}).toArray();
-        return allUsers;
+        return await nrpSender.sendMessage({
+            id: uuid.v4(),
+            collection: "users",
+            operation: "getAllUsers",
+            params: {}
+        });
     },
 
     /**
@@ -73,11 +78,12 @@ module.exports = {
      * @throws Will throw an error if username or password incorrect.
      */
     getUserByAuth: async (username, password) => {
-        let usersCollection = await users();
-        let user = await usersCollection.findOne({ username: username });
-        if (!user || ! bcrypt.compareSync(password, user.password))
-            throw ("Username or password incorrect.");
-        return user;
+        return await nrpSender.sendMessage({
+            id: uuid.v4(),
+            collection: "users",
+            operation: "getUserByAuth",
+            params: { username, password }
+        });
     },
 
     /**
@@ -85,14 +91,12 @@ module.exports = {
      * @returns {boolean}
      */
     isUsernameUnique: async (username) => {
-        let usersCollection = await users();
-        let allUsers = await usersCollection.find({}).toArray();
-        let flag = true;
-        allUsers.forEach((user) => {
-            if (user.username == username)
-                flag = false;
-        })
-        return flag;
+        return await nrpSender.sendMessage({
+            id: uuid.v4(),
+            collection: "users",
+            operation: "isUsernameUnique",
+            params: { username }
+        });
     }
 
 }

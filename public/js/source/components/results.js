@@ -38,7 +38,7 @@ const SearchResults = React.createClass({
         let resultList = this.state.results;
         let results = resultList.map((result) => {
             return (
-                <div className="panel panel-primary">
+                <div className="panel panel-default">
                     <div className="panel-heading">
                         <div className="row">
                             <div className="airline col-xs-6">
@@ -47,7 +47,7 @@ const SearchResults = React.createClass({
                         </div>
                     </div>
                     <div className="panel-body">
-                        <div className="row">
+                        <div className="listInfo row">
                             <div className="price col-xs-4">
                                 <p style={{"font-weight":"bold"}}>${result.price.substring(3).toLocaleString('USD', {
                                     style: 'currency',

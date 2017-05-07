@@ -1,11 +1,36 @@
 * {
   box-sizing: border-box; }
 
-body, html {
-  background: #FEFEFE;
-  color: #333;
-  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
-  font-size: 20pt; }
+body {
+  background-color: #333;
+  background-image: url(/public/css/images/bg.jpg);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover; }
+
+.panel {
+  background: rgba(0, 0, 0, 0.5);
+  color: #FFFFFF;
+  border: none;
+  box-shadow: none; }
+
+.panel-error {
+  background: rgba(168, 37, 30, 0.5);
+  color: #FFFFFF;
+  border: none;
+  box-shadow: none; }
+
+legend, h1, .listInfo, help {
+  color: #FFFFFF; }
+
+.searchPanel {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 30px; }
 
 p {
   font-size: 12pt; }
+
+a {
+  color: #c7c7c7;
+  text-decoration: underline; }

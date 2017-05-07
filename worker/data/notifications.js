@@ -3,7 +3,9 @@ const nodemailer = require('nodemailer');
 const credentials = require("./credentials");
 
 module.exports = {
-    notifyChanges: async (flightId) => {
+    notifyChanges: async (params) => {
+        let { flightId } = params;
+
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -42,5 +44,3 @@ async function getNotificationEmails(flightId) {
     let notifyEmails = notifyOrders.map(order => order.user.email);
     return notifyEmails;
 }
-
-notifyChanges();

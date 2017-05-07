@@ -4,8 +4,7 @@ var LoginForm = React.createClass({
     displayName: 'LoginForm',
     getInitialState: function getInitialState() {
         return {
-            errors: "",
-            errorFlag: false,
+            error: "",
             user: {
                 email: '',
                 username: '',
@@ -26,7 +25,7 @@ var LoginForm = React.createClass({
             success: function success(loggedIn) {
                 if (loggedIn) {
                     _this.setState({
-                        errors: {},
+                        error: '',
                         user: {
                             email: '',
                             username: '',
@@ -39,7 +38,7 @@ var LoginForm = React.createClass({
                     });
                 } else {
                     _this.setState({
-                        errors: {},
+                        error: '',
                         user: {
                             email: '',
                             username: '',
@@ -61,7 +60,7 @@ var LoginForm = React.createClass({
         var _this2 = this;
 
         event.preventDefault();
-        this.setState({ errors: "", errorFlag: false });
+        this.setState({ error: "" });
         var newUser = { firstName: this.state.user.firstname, lastName: this.state.user.lastname, username: this.state.user.username, password: this.state.user.password, email: this.state.user.email };
         // console.log(newUser);
 
@@ -72,7 +71,7 @@ var LoginForm = React.createClass({
             success: function success(userId) {
                 // console.log(userId);
                 _this2.setState({
-                    errors: {},
+                    error: '',
                     user: {
                         email: '',
                         username: '',
@@ -103,7 +102,7 @@ var LoginForm = React.createClass({
             success: function success(user) {
                 // console.log(user);
                 _this3.setState({
-                    errors: {},
+                    error: '',
                     user: {
                         email: '',
                         username: '',
@@ -116,6 +115,7 @@ var LoginForm = React.createClass({
                 });
             },
             error: function error(xhr, status, err) {
+                _this3.setState({ error: xhr.responseText });
                 console.error(status, err.toString());
             }
         });
@@ -147,12 +147,17 @@ var LoginForm = React.createClass({
                 }
             });
         } else if (field == "confirmpassword" || field == "password") {
-            element = $("#confirmpassword")[0];
-
-            if (this.state.user.password != this.state.user.confirmpassword) {
-                element.setCustomValidity('Passwords dont match.');
+            var p = $("#password")[0];
+            var cp = $("#confirmpassword")[0];
+            if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(this.state.user.password)) {
+                p.setCustomValidity('Password must have minimum 8 characters, at least 1 letter and 1 number.');
             } else {
-                element.setCustomValidity('');
+                p.setCustomValidity('');
+            }
+            if (this.state.user.password != this.state.user.confirmpassword) {
+                cp.setCustomValidity('Passwords dont match.');
+            } else {
+                cp.setCustomValidity('');
             }
         }
     },
@@ -194,15 +199,29 @@ var LoginForm = React.createClass({
                                             'Login To Your Account'
                                         ),
                                         React.createElement(
+                                            'div',
+                                            { className: this.state.error == '' ? 'hidden' : 'panel panel-error show' },
+                                            React.createElement(
+                                                'div',
+                                                { className: 'panel-body' },
+                                                this.state.error
+                                            )
+                                        ),
+                                        React.createElement(
                                             'form',
                                             { onSubmit: this.onLogin, className: 'login-form' },
+                                            React.createElement(
+                                                'label',
+                                                { className: 'control-label', htmlFor: 'usernameLogin' },
+                                                'Username:'
+                                            ),
                                             React.createElement(
                                                 'div',
                                                 { className: 'form-group' },
                                                 React.createElement(
                                                     'div',
                                                     { className: 'input-group' },
-                                                    React.createElement('input', { type: 'text', className: 'form-control', placeholder: 'Type your username', name: 'username', onChange: this.onChange, value: this.state.user.username, required: 'true' }),
+                                                    React.createElement('input', { type: 'text', className: 'form-control', placeholder: 'Type your username', name: 'username', id: 'usernameLogin', onChange: this.onChange, value: this.state.user.username, required: 'true' }),
                                                     React.createElement(
                                                         'span',
                                                         { className: 'input-group-addon' },
@@ -211,12 +230,17 @@ var LoginForm = React.createClass({
                                                 )
                                             ),
                                             React.createElement(
+                                                'label',
+                                                { className: 'control-label', htmlFor: 'passwordLogin' },
+                                                'Password:'
+                                            ),
+                                            React.createElement(
                                                 'div',
                                                 { className: 'form-group' },
                                                 React.createElement(
                                                     'div',
                                                     { className: 'input-group' },
-                                                    React.createElement('input', { type: 'password', className: 'form-control', placeholder: 'Type your password', name: 'password', onChange: this.onChange, value: this.state.user.password, required: 'true' }),
+                                                    React.createElement('input', { type: 'password', className: 'form-control', placeholder: 'Type your password', name: 'password', id: 'passwordLogin', onChange: this.onChange, value: this.state.user.password, required: 'true' }),
                                                     React.createElement(
                                                         'span',
                                                         { className: 'input-group-addon' },
@@ -258,12 +282,17 @@ var LoginForm = React.createClass({
                                             'form',
                                             { form: true, action: '/login', onSubmit: this.onRegister, className: 'login-form' },
                                             React.createElement(
+                                                'label',
+                                                { className: 'control-label', htmlFor: 'firstname' },
+                                                'First Name:'
+                                            ),
+                                            React.createElement(
                                                 'div',
                                                 { className: 'form-group' },
                                                 React.createElement(
                                                     'div',
                                                     { className: 'input-group' },
-                                                    React.createElement('input', { type: 'text', className: 'form-control', placeholder: 'First Name', name: 'firstname', onChange: this.onChange, value: this.state.user.firstname, required: 'true' }),
+                                                    React.createElement('input', { type: 'text', className: 'form-control', placeholder: 'First Name', name: 'firstname', id: 'firstname', onChange: this.onChange, value: this.state.user.firstname, required: 'true' }),
                                                     React.createElement(
                                                         'span',
                                                         { className: 'input-group-addon' },
@@ -272,18 +301,28 @@ var LoginForm = React.createClass({
                                                 )
                                             ),
                                             React.createElement(
+                                                'label',
+                                                { className: 'control-label', htmlFor: 'lastname' },
+                                                'Last Name:'
+                                            ),
+                                            React.createElement(
                                                 'div',
                                                 { className: 'form-group' },
                                                 React.createElement(
                                                     'div',
                                                     { className: 'input-group' },
-                                                    React.createElement('input', { type: 'text', className: 'form-control', placeholder: 'Last Name', name: 'lastname', onChange: this.onChange, value: this.state.user.lastname, required: 'true' }),
+                                                    React.createElement('input', { type: 'text', className: 'form-control', placeholder: 'Last Name', name: 'lastname', id: 'lastname', onChange: this.onChange, value: this.state.user.lastname, required: 'true' }),
                                                     React.createElement(
                                                         'span',
                                                         { className: 'input-group-addon' },
                                                         React.createElement('i', { className: 'glyphicon glyphicon-user' })
                                                     )
                                                 )
+                                            ),
+                                            React.createElement(
+                                                'label',
+                                                { className: 'control-label', htmlFor: 'username' },
+                                                'Username:'
                                             ),
                                             React.createElement(
                                                 'div',
@@ -300,12 +339,17 @@ var LoginForm = React.createClass({
                                                 )
                                             ),
                                             React.createElement(
+                                                'label',
+                                                { className: 'control-label', htmlFor: 'email' },
+                                                'Email:'
+                                            ),
+                                            React.createElement(
                                                 'div',
                                                 { className: 'form-group' },
                                                 React.createElement(
                                                     'div',
                                                     { className: 'input-group' },
-                                                    React.createElement('input', { type: 'email', className: 'form-control', placeholder: 'Email', name: 'email', onChange: this.onChange, value: this.state.user.email, required: 'true' }),
+                                                    React.createElement('input', { type: 'email', className: 'form-control', placeholder: 'Email', name: 'email', id: 'email', onChange: this.onChange, value: this.state.user.email, required: 'true' }),
                                                     React.createElement(
                                                         'span',
                                                         { className: 'input-group-addon' },
@@ -314,18 +358,28 @@ var LoginForm = React.createClass({
                                                 )
                                             ),
                                             React.createElement(
+                                                'label',
+                                                { className: 'control-label', htmlFor: 'password' },
+                                                'Password:'
+                                            ),
+                                            React.createElement(
                                                 'div',
                                                 { className: 'form-group' },
                                                 React.createElement(
                                                     'div',
                                                     { className: 'input-group' },
-                                                    React.createElement('input', { type: 'password', className: 'form-control', placeholder: 'Password', name: 'password', onChange: this.onChange, value: this.state.user.password, required: 'true' }),
+                                                    React.createElement('input', { type: 'password', className: 'form-control', placeholder: 'Password', name: 'password', id: 'password', onChange: this.onChange, value: this.state.user.password, required: 'true' }),
                                                     React.createElement(
                                                         'span',
                                                         { className: 'input-group-addon' },
                                                         React.createElement('i', { className: 'glyphicon glyphicon-lock' })
                                                     )
                                                 )
+                                            ),
+                                            React.createElement(
+                                                'label',
+                                                { className: 'control-label', htmlFor: 'confirmpassword' },
+                                                'Confirm Password:'
                                             ),
                                             React.createElement(
                                                 'div',
@@ -411,7 +465,7 @@ var SearchResults = React.createClass({
         var results = resultList.map(function (result) {
             return React.createElement(
                 'div',
-                { className: 'panel panel-primary' },
+                { className: 'panel panel-default' },
                 React.createElement(
                     'div',
                     { className: 'panel-heading' },
@@ -439,7 +493,7 @@ var SearchResults = React.createClass({
                     { className: 'panel-body' },
                     React.createElement(
                         'div',
-                        { className: 'row' },
+                        { className: 'listInfo row' },
                         React.createElement(
                             'div',
                             { className: 'price col-xs-4' },
@@ -501,8 +555,7 @@ var SearchForm = React.createClass({
     displayName: 'SearchForm',
     getInitialState: function getInitialState() {
         return {
-            errors: "",
-            errorFlag: false,
+            error: "",
             query: {
                 origin: '',
                 destination: '',
@@ -522,7 +575,7 @@ var SearchForm = React.createClass({
             _this.state.query.maxPrice = value;
         };
 
-        $('#maxPrice').slider({
+        $('#maxPrice').bootstrapSlider({
             formatter: function formatter(value) {
                 setMaxPrice(value);
                 $('#maxPriceDisp').text("$" + value);
@@ -535,16 +588,19 @@ var SearchForm = React.createClass({
 
         event.preventDefault();
         this.setState({ errors: "", errorFlag: false });
-        var newQuery = { origin: this.state.query.origin, destination: this.state.query.destination, date: this.state.query.ddate, adultCount: this.state.query.adultCount, maxPrice: this.state.query.maxPrice };
+        var date = void 0;
+        if (this.state.ddate) date = this.state.ddate;else date = $("#ddate").val();
+        var newQuery = { origin: this.state.query.origin, destination: this.state.query.destination, date: date, adultCount: this.state.query.adultCount, maxPrice: this.state.query.maxPrice };
         $.ajax({
             type: "POST",
             url: "/search",
             data: { query: newQuery },
             success: function success(results) {
                 console.log(results);
-                _this2.setState({ results: results });
+                _this2.setState({ results: results, error: '' });
             },
             error: function error(xhr, status, err) {
+                _this2.setState({ error: xhr.responseText });
                 console.error(status, err.toString());
             }
         });
@@ -553,6 +609,7 @@ var SearchForm = React.createClass({
         var field = event.target.name;
         var query = this.state.query;
         query[field] = event.target.value;
+
         this.setState({
             query: query
         });
@@ -562,10 +619,10 @@ var SearchForm = React.createClass({
             // <p>Search flight form coming soon!</p>
             React.createElement(
                 'div',
-                { className: 'searchContainer ' },
+                { className: 'searchContainer' },
                 React.createElement(
                     'div',
-                    { className: 'panel panel-default' },
+                    { className: 'searchPanel panel panel-default col-xs-8 ' },
                     React.createElement(
                         'div',
                         { className: 'panel-body' },
@@ -586,20 +643,20 @@ var SearchForm = React.createClass({
                                     { className: 'form-group inputDiv col-md-4', style: { "margin-left": "10px" } },
                                     React.createElement(
                                         'label',
-                                        { className: 'control-label', 'for': 'origin' },
+                                        { className: 'control-label', htmlFor: 'origin' },
                                         'Origin'
                                     ),
-                                    React.createElement('input', { id: 'origin', name: 'origin', type: 'text', placeholder: 'Where are you flying from?', className: 'form-control input-md', required: '', onChange: this.onChange, value: this.state.query.origin })
+                                    React.createElement('input', { id: 'origin', name: 'origin', type: 'text', placeholder: 'Where are you flying from?', className: 'form-control input-md', required: 'true', onChange: this.onChange, value: this.state.query.origin })
                                 ),
                                 React.createElement(
                                     'div',
                                     { className: 'form-group inputDiv col-md-4', style: { "margin-left": "10px" } },
                                     React.createElement(
                                         'label',
-                                        { className: 'control-label', 'for': 'destination' },
+                                        { className: 'control-label', htmlFor: 'destination' },
                                         'Destination'
                                     ),
-                                    React.createElement('input', { id: 'destination', name: 'destination', type: 'text', placeholder: 'Where are you flying to?', className: 'form-control input-md', required: '', onChange: this.onChange, value: this.state.query.destination })
+                                    React.createElement('input', { id: 'destination', name: 'destination', type: 'text', placeholder: 'Where are you flying to?', className: 'form-control input-md', required: 'true', onChange: this.onChange, value: this.state.query.destination })
                                 )
                             ),
                             React.createElement(
@@ -610,17 +667,17 @@ var SearchForm = React.createClass({
                                     { className: 'form-group inputDiv col-md-4 ', style: { "margin-left": "10px" } },
                                     React.createElement(
                                         'label',
-                                        { className: 'control-label', 'for': 'ddate' },
+                                        { className: 'control-label', htmlFor: 'ddate' },
                                         'Departure Date'
                                     ),
-                                    React.createElement('input', { id: 'ddate', name: 'ddate', type: 'date', placeholder: 'Select departure date', className: 'form-control input-md', required: '', onChange: this.onChange, value: this.state.query.ddate })
+                                    React.createElement('input', { id: 'ddate', name: 'ddate', type: 'date', placeholder: 'Select departure date', className: 'form-control input-md', required: 'true', onChange: this.onChange, value: this.state.query.ddate })
                                 ),
                                 React.createElement(
                                     'div',
-                                    { className: 'form-group inputDiv col-md-2', style: { "margin-left": "10px" } },
+                                    { className: 'form-group inputDiv col-md-3', style: { "margin-left": "10px" } },
                                     React.createElement(
                                         'label',
-                                        { className: 'control-label', 'for': 'adultCount' },
+                                        { className: 'control-label', htmlFor: 'adultCount' },
                                         'No. of Adults'
                                     ),
                                     React.createElement(
@@ -664,13 +721,14 @@ var SearchForm = React.createClass({
                                 { className: 'row' },
                                 React.createElement(
                                     'div',
-                                    { className: 'form-group inputDiv col-md-4 ', style: { "margin-left": "20px" } },
+                                    { className: 'form-group inputDiv col-md-4 ', style: { "margin-left": "10px" } },
                                     React.createElement(
                                         'label',
-                                        { className: 'control-label', 'for': 'maxPrice' },
+                                        { className: 'control-label', htmlFor: 'maxPrice' },
                                         'Max Price'
                                     ),
                                     React.createElement('input', { id: 'maxPrice', name: 'maxPrice', 'data-slider-id': 'maxPrice', type: 'text', 'data-slider-min': '0', 'data-slider-max': '1000', 'data-slider-step': '1', 'data-slider-value': '0', className: 'form-control input-md', onChange: this.onChange, value: this.state.query.origin }),
+                                    React.createElement('br', null),
                                     React.createElement('help', { className: 'maxPriceDisp', id: 'maxPriceDisp', name: 'maxPriceDisp' })
                                 )
                             ),
@@ -686,9 +744,79 @@ var SearchForm = React.createClass({
                         )
                     )
                 ),
+                React.createElement(
+                    'div',
+                    { className: this.state.error == '' ? 'hidden' : 'panel panel-error col-xs-8 show' },
+                    React.createElement(
+                        'div',
+                        { className: 'panel-body' },
+                        this.state.error
+                    )
+                ),
                 React.createElement(SearchResults, { results: this.state.results })
             )
         );
     }
 });
 ReactDOM.render(React.createElement(SearchForm, null), document.getElementById('search'));
+"use strict";
+/*import React, { Component } from 'react';
+import CommentList from './CommentList';
+import CommentForm from './CommentForm';
+import $ from 'jquery';
+
+class CommentBox extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { data: [] };
+    }
+
+    loadCommentsFromServer() {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            cache: false,
+            success: (data) => { this.props.actions.showComments(data); },
+            error: (xhr, status, err) => {
+                console.error(this.props.url, status, err.toString());
+            }
+        });
+    }
+
+    handleCommentSubmit(comment) {
+        const comments = this.state.data;
+        comment.id = Date.now();
+        this.props.actions.addComment(comment);
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            type: 'POST',
+            data: comment,
+            success: (data) => { this.props.actions.showComments(data); },
+            error: (xhr, status, err) => {
+                this.props.actions.showComments(comments)
+                console.error(this.props.url, status, err.toString());
+            }
+        });
+    }
+
+    componentDidMount() {
+        this.loadCommentsFromServer();
+        setInterval(this.loadCommentsFromServer.bind(this), this.props.pollInterval);
+    }
+
+    render() {
+        return (
+            <div className="commentBox">
+                <h1>Comments</h1>
+                <CommentList data={this.props.data} />
+                <CommentForm onCommentSubmit={this.handleCommentSubmit.bind(this)} />
+            </div>
+        );
+    }
+}
+
+export default CommentBox*/
+"use strict";
+"use strict";
+"use strict";
