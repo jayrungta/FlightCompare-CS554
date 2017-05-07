@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const data = require("../data");
 const userData = data.users;
-var passport = require('passport')
-    , LocalStrategy = require('passport-local').Strategy;
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 passport.use(new LocalStrategy(
     async function (username, password, done) {
         try {
             let user = await userData.getUserByAuth(username, password);
+
             return done(null, user);
         }
         catch (err) {
@@ -34,34 +35,17 @@ router.get("/", (req, res) => {
     if (req.user)
         res.redirect("/search");
     else
-    res.render("login", {})
+    // TODO should render the error message to user
+        res.render("login", {})
 });
 
-// router.post('/',
-//     passport.authenticate('local', {
-//         successRedirect: '/search',
-//         failureRedirect: '/login',
-//         failureFlash: true
-//     })
-// );
-
-router.post('/', function (req, res, next) {
-    passport.authenticate('local', function (err, user, info) {
-        if (err) {
-            return res.status(500).send(err);
-        }
-        if (!user) {
-            return res.status(500).send("Username or Password Incorrect!");
-        }
-        req.logIn(user, function (err) {
-            if (err) {
-                return res.status(500).send(err);
-            }
-            return res.redirect('/search');
-        });
-    })(req, res, next);
-});
-
+router.post('/',
+    passport.authenticate('local', {
+        successRedirect: '/search',
+        failureRedirect: '/login',
+        failureFlash: true
+    })
+);
 
 router.post('/namecheck', async (req, res) => {
     let bool = await userData.isUsernameUnique(req.body.username);

@@ -4,7 +4,7 @@
   "description": "cs554 final project",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node test.js",
     "start": "node server.js"
   },
   "repository": {
@@ -37,10 +37,11 @@
     "express": "^4.15.2",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.2",
+    "handlebars": "^4.0.5",
     "mongodb": "^2.2.25",
+    "node-redis-pubsub": "^1.0.2",
     "node-uuid": "^1.4.8",
     "nodemailer": "^4.0.1",
-    "handlebars": "^4.0.5",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "wkhtmltopdf": "^0.3.4",
