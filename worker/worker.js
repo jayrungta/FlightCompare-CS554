@@ -1,8 +1,8 @@
 const redisConnection = require("./redis-connection");
-const { users, posts, orders, flights } = require("./data");
+const { users, posts, orders, flights, notifications } = require("./data");
 
 redisConnection.on("users:request:*", async (message) => {
-    let { id, collection, operation, params} = message;
+    let { id, collection, operation, params } = message;
 
     try {
         let result = await users[operation](params);
@@ -16,7 +16,7 @@ redisConnection.on("users:request:*", async (message) => {
 });
 
 redisConnection.on("posts:request:*", async (message) => {
-    let { id, collection, operation, params} = message;
+    let { id, collection, operation, params } = message;
 
     try {
         let result = await posts[operation](params);
@@ -30,7 +30,7 @@ redisConnection.on("posts:request:*", async (message) => {
 });
 
 redisConnection.on("orders:request:*", async (message) => {
-    let { id, collection, operation, params} = message;
+    let { id, collection, operation, params } = message;
 
     try {
         let result = await orders[operation](params);
@@ -44,7 +44,7 @@ redisConnection.on("orders:request:*", async (message) => {
 });
 
 redisConnection.on("flights:request:*", async (message) => {
-    let { id, collection, operation, params} = message;
+    let { id, collection, operation, params } = message;
 
     try {
         let result = await flights[operation](params);
@@ -58,7 +58,7 @@ redisConnection.on("flights:request:*", async (message) => {
 });
 
 redisConnection.on("notifications:request:*", async (message) => {
-    let { id, collection, operation, params} = message;
+    let { id, collection, operation, params } = message;
 
     try {
         let result = await notifications[operation](params);
