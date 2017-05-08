@@ -432,6 +432,7 @@ var ResultItem = React.createClass({
     getInitialState: function getInitialState() {
         return {
             expanded: false,
+            printed: false,
             buttonText: 'Show Details'
         };
     },
@@ -464,7 +465,38 @@ var ResultItem = React.createClass({
         });
     },
     doPrint: function doPrint() {
-        alert('Print');
+        var _this4 = this;
+        if(this.state.expanded){
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/search/airlines",
+                data: {
+                    flight:{
+                            airlineName: this.props.airlineName,
+                            origin: this.props.origin,
+                            destination: this.props.destination,
+                            price: this.props.price,
+                            departureTime: this.formatAMPM(new Date(this.props.departureTime)),
+                            arrivalTime: this.formatAMPM(new Date(this.props.arrivalTime)),
+                            duration: this.formatDuration(this.props.duration),
+                            flightNo: this.props.flightNo,
+                            meal: this.props.meal,
+                            originName: this.props.originName,
+                            destinationName: this.props.destinationName,
+                            originTerminal: this.props.originTerminal
+                    }
+                },
+                success: function success(results) {
+                    console.log("print success");
+                    _this4.setState({ results:results, printed : true});
+                },
+                error: function error(xhr, status, err) {
+                    _this4.setState({ error: xhr.responseText });
+                    console.error(status, err.toString());
+                }
+            });
+        }
     },
     doTrack: function doTrack() {
         alert('Track');
