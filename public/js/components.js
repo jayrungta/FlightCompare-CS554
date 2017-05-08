@@ -497,6 +497,7 @@ var ResultItem = React.createClass({
                 }
             });
         }
+        alert('print succeed');
     },
     doTrack: function doTrack() {
         alert('Track');

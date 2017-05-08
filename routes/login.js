@@ -55,6 +55,7 @@ router.post('/', function (req, res, next) {
         }
         req.logIn(user, function (err) {
             if (err) {
+                console.log(err);
                 return res.status(500).send(err);
             }
             return res.redirect('/search');
