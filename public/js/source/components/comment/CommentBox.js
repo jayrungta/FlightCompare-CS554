@@ -1,4 +1,4 @@
-/*import React, { Component } from 'react';
+import React, { Component } from 'react';
 import CommentList from './CommentList';
 import CommentForm from './CommentForm';
 import $ from 'jquery';
@@ -11,58 +11,44 @@ class CommentBox extends Component {
 
     loadCommentsFromServer() {
         $.ajax({
-            url: this.props.url,
+            //TODO get comments from this url
+            url: "/where/flightNo", // but where?
             dataType: 'json',
             cache: false,
-            success: (data) => { this.props.actions.showComments(data); },
+            success: (data) => { this.setState({data}); },
             error: (xhr, status, err) => {
-                console.error(this.props.url, status, err.toString());
+                console.error(status, err.toString());
             }
         });
     }
 
     handleCommentSubmit(comment) {
         const comments = this.state.data;
-        comment.id = Date.now();
-        this.props.actions.addComment(comment);
         $.ajax({
-            url: this.props.url,
+            url: "/where/flightNo", // and this
             dataType: 'json',
             type: 'POST',
             data: comment,
-            success: (data) => { this.props.actions.showComments(data); },
+            success: (data) => { loadCommentsFromServer(); },
             error: (xhr, status, err) => {
-                this.props.actions.showComments(comments)
-                console.error(this.props.url, status, err.toString());
+                console.error(status, err.toString());
             }
         });
     }
 
     componentDidMount() {
         this.loadCommentsFromServer();
-        setInterval(this.loadCommentsFromServer.bind(this), this.props.pollInterval);
     }
 
     render() {
         return (
             <div className="commentBox">
-                <h1>Comments</h1>
-                <CommentList data={this.props.data} />
+                <p>Comments</p>
+                <CommentList comments={this.props.data} />
                 <CommentForm onCommentSubmit={this.handleCommentSubmit.bind(this)} />
             </div>
         );
     }
 }
 
-export default CommentBox*/
-
-
-const CommentBox = React.createClass({
-    render() {
-        return (
-            <div className="">
-                comment box {this.props.flightNo}
-            </div>
-        );
-    }
-});
+export default CommentBox;

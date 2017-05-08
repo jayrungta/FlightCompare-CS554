@@ -62,7 +62,6 @@ const ResultItem = React.createClass({
                     </dl>
                 </div>
                 <div className="col-md-4">
-                    comments goes here.
                     <CommentBox flightNo = {this.props.flightNo}/>
                 </div>
             </div>
