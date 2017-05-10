@@ -1,9 +1,29 @@
 body {
-    background: #FEFEFE;
+    background: #eee;
     font-family: Georgia, Cambria, "Times New Roman", Times, serif;
     font-size: 50pt;
-    margin: auto;
+    margin-top:20px;
 }
+
+.invoice {
+    padding: 30px;
+}
+
+.invoice .table tr.line {
+	border-bottom: 1px solid #ccc;
+}
+
+.invoice .table{
+	width: 100%;
+	font-size: 50pt;
+}
+
+.invoice .table td {
+	text-align: center;
+	width: 25%;
+	border: none;
+}
+
 
 h1 {
     font-size: 80pt;
