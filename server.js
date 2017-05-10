@@ -11,13 +11,6 @@ const passport = require('passport')
 var flash = require("connect-flash");
 const exphbs = require('express-handlebars');
 const Handlebars = require('handlebars');
-// //wkhtmlpdf
-// const wkhtmlpdf = require('wkhtmlpdf');
-// const fs = require('fs');
-
-// // URL      get the pdf file
-// wkhtmltopdf('http://localhost:3000/recipes', { pageSize: 'letter' })
-//   .pipe(fs.createWriteStream('out.pdf'));
 
 const handlebarsInstance = exphbs.create({
     defaultLayout: 'main',
@@ -63,6 +56,7 @@ app.use(passport.session());
 app.use(flash());
 
 configRoutes(app);
+
 
 app.listen(3000, () => {
     console.log("We've now got a server!");

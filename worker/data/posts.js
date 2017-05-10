@@ -1,4 +1,4 @@
-const {posts} = require("../dbconfig/MongoCollections.js");
+const { posts } = require("../dbconfig/MongoCollections.js");
 const users = require("./users");
 const uuid = require('node-uuid');
 const xss = require('xss');

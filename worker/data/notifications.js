@@ -1,6 +1,6 @@
 const orders = require("./orders");
 const nodemailer = require('nodemailer');
-const credentials = require("../../data/notification/credentials");
+/*const credentials = require("./credentials");*/
 
 module.exports = {
     notifyChanges: async (params) => {
