@@ -30,19 +30,55 @@ router.post("/airlines", (req, res) => {
         let originName = req.body.flight.originName;
         let destinationName = req.body.flight.destinationName;
         let originTerminal = req.body.flight.originTerminal;
-        let meal = req.body.flight.meal;
-        if(meal === undefined)
-            meal = "Not specified";
-        wkhtmlpdf('<h1>Airline Name: '+ airlineName +'</h1>'
-                 +'<h2>Origin: '+originName+'('+origin+')'+'</h2>'
-                 + '<h2>Destination: '+destinationName+'('+destination+')'+'</h2>'
-                 + '<h3>Origin Terminal: '+ originTerminal+ '</h3>'
-                 +'<ul><li>Price: '+ price+'</li>'
-                 + '<li>Departure Time: '+ departureTime +'</li>'
-                 + '<li>Arrival Time: '+ arrivalTime + '</li>'
-                 + '<li>Duration: '+ duration + '</li>'
-                 +'<li>Flight Number: '+ flighNo + '</li>'
-                 +'<li>Meal: '+ meal + '</li></ul>',
+        let destinationTerminal = req.body.flight.destinationTerminal;
+        let meal = req.body.flight.meal === undefined ? "N/A": req.body.flight.meal;
+
+
+        wkhtmlpdf(`<div class="container">
+    <div class="row">
+        <div class="grid invoice">
+            <div class="grid-body">
+                <div class="invoice-title">
+                    <div class="row">
+                        <h2>Your ticket itinerary<br>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                        <h3>TICKET SUMMARY</h3>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr class="line">
+                                    <td><strong>Airline Name</strong></td>
+                                    <td><strong>From</strong></td>
+                                    <td><strong>To</strong></td>
+                                    <td><strong>Duration</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>${airlineName}</td>
+                                    <td>${originName}(${origin})<br />${departureTime}<br />Terminal: ${originTerminal}</td>
+                                    <td>${destinationName}(${destination})<br />${arrivalTime}<br />Terminal: ${destinationTerminal}</td>
+                                    <td>${duration}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td class="text-right"><strong>Meal</strong></td>
+                                    <td class="text-right"><strong>${meal}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td class="text-right"><strong>Price</strong></td>
+                                    <td class="text-right"><strong>${price}</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>                                 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`, 
                 { userStyleSheet: 'public/css/print.css',
                   pageSize: 'letter'})
                 .pipe(fs.createWriteStream('out.pdf'));
@@ -62,15 +98,7 @@ router.post('/', async (req, res) => {
 
     try {
         let flights = await flightData.searchFlights(adultCount, maxPrice, solutions, origin, destination, date);
-
-        // flights.forEach(function (flight,index) {
-        //     for (let airline in airlineInfo) {
-        //         if(airlineInfo[airline].IATA == flight.airlineCode){
-        //             flights[index].airlineName = airlineInfo[airline].name;
-        //             flights[index].airlineLogo = airlineInfo[airline].logoLink;
-        //         }
-        //     }
-        // }, this);
+    
         //console.log(flights);
         /*
         let flights = [ { airlineCode: 'VX',
@@ -84,6 +112,7 @@ router.post('/', async (req, res) => {
             flightNo: 'VX 1167',
             destinationTerminal: '6',
             originTerminal: 'A',
+            destinationTerminal: 'C',
             originName: 'Newark Liberty International',
             destinationName: 'Los Angeles International' },
           { airlineCode: 'VX',
@@ -97,10 +126,11 @@ router.post('/', async (req, res) => {
             flightNo: 'VX 1165',
             destinationTerminal: '6',
             originTerminal: 'A',
+            destinationTerminal: 'B',
             originName: 'Newark Liberty International',
-            destinationName: 'Los Angeles International' }]
-
-        */
+            destinationName: 'Los Angeles International' }]*/
+        
+        
         res.json(flights);
     }
     catch (err) {

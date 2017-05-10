@@ -15,6 +15,20 @@ const ResultItem = React.createClass({
         var strTime = hours + ':' + minutes + ' ' + ampm;
         return strTime;
     },
+    formatDATE(date) {
+        var year = date.getFullYear();
+        var monthNum = date.getMonth();
+        var day = date.getDate();
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        var month=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = hours + ':' + minutes + ' ' + ampm + ',' + month[monthNum] + '-' + day + '-' + year;
+        return strTime;
+    },
     formatDuration(duration) {
         var hours = Math.trunc(duration / 60);
         var minutes = duration % 60;
@@ -34,7 +48,6 @@ const ResultItem = React.createClass({
         });
     },
     doPrint: function () {
-        //  alert('Print');
         if (this.state.expanded) {
             event.preventDefault();
             $.ajax({
@@ -46,20 +59,22 @@ const ResultItem = React.createClass({
                         origin: this.props.origin,
                         destination: this.props.destination,
                         price: this.props.price,
-                        departureTime: this.formatAMPM(new Date(this.props.departureTime)),
-                        arrivalTime: this.formatAMPM(new Date(this.props.arrivalTime)),
+                        departureTime: this.formatDATE(new Date(this.props.departureTime)),
+                        arrivalTime: this.formatDATE(new Date(this.props.arrivalTime)),
                         duration: this.formatDuration(this.props.duration),
                         flightNo: this.props.flightNo,
                         meal: this.props.meal,
                         originName: this.props.originName,
                         destinationName: this.props.destinationName,
-                        originTerminal: this.props.originTerminal
+                        originTerminal: this.props.originTerminal,
+                        destinationTerminal: this.props.destinationTerminal
                     }
                 },
                 success: function success(results) {
                     console.log("print success");
+                    //this.pdfView();
                     setTimeout(function(){ window.open("displayPDF","_blank"); }, 2000);
-
+                   
                     // this.setState({ results: results, printed: true });
                 },
                 error: function error(xhr, status, err) {
@@ -90,10 +105,10 @@ const ResultItem = React.createClass({
                             <dd>{this.props.flightNo}</dd>
                             <dt>Origin</dt>
                             <dd>{this.props.originName}</dd>
-                            <dt>Origin Terminal</dt>
-                            <dd>{this.props.originTerminal}</dd>
                             <dt>Destination</dt>
                             <dd>{this.props.destinationName}</dd>
+                            <dt>Origin Terminal</dt>
+                            <dd>{this.props.originTerminal}</dd>
                             <dt>Destination Terminal</dt>
                             <dd>{this.props.destinationTerminal}</dd>
                             <dt>Meal</dt>
@@ -118,6 +133,7 @@ const ResultItem = React.createClass({
     },
     render() {
         let expandedDiv = this.getExpandedDiv();
+
         return (
             <div className="panel panel-default">
                 <div className="panel-heading">

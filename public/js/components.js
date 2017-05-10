@@ -445,6 +445,20 @@ var ResultItem = React.createClass({
         var strTime = hours + ':' + minutes + ' ' + ampm;
         return strTime;
     },
+    formatDATE: function formatDATE(date) {
+        var year = date.getFullYear();
+        var monthNum = date.getMonth();
+        var day = date.getDate();
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = hours + ':' + minutes + ' ' + ampm + ',' + month[monthNum] + '-' + day + '-' + year;
+        return strTime;
+    },
     formatDuration: function formatDuration(duration) {
         var hours = Math.trunc(duration / 60);
         var minutes = duration % 60;
@@ -464,7 +478,6 @@ var ResultItem = React.createClass({
         });
     },
     doPrint: function doPrint() {
-        //  alert('Print');
         if (this.state.expanded) {
             event.preventDefault();
             $.ajax({
@@ -476,18 +489,20 @@ var ResultItem = React.createClass({
                         origin: this.props.origin,
                         destination: this.props.destination,
                         price: this.props.price,
-                        departureTime: this.formatAMPM(new Date(this.props.departureTime)),
-                        arrivalTime: this.formatAMPM(new Date(this.props.arrivalTime)),
+                        departureTime: this.formatDATE(new Date(this.props.departureTime)),
+                        arrivalTime: this.formatDATE(new Date(this.props.arrivalTime)),
                         duration: this.formatDuration(this.props.duration),
                         flightNo: this.props.flightNo,
                         meal: this.props.meal,
                         originName: this.props.originName,
                         destinationName: this.props.destinationName,
-                        originTerminal: this.props.originTerminal
+                        originTerminal: this.props.originTerminal,
+                        destinationTerminal: this.props.destinationTerminal
                     }
                 },
                 success: function success(results) {
                     console.log("print success");
+                    //this.pdfView();
                     setTimeout(function () {
                         window.open("displayPDF", "_blank");
                     }, 2000);
@@ -551,22 +566,22 @@ var ResultItem = React.createClass({
                             React.createElement(
                                 'dt',
                                 null,
-                                'Origin Terminal'
-                            ),
-                            React.createElement(
-                                'dd',
-                                null,
-                                this.props.originTerminal
-                            ),
-                            React.createElement(
-                                'dt',
-                                null,
                                 'Destination'
                             ),
                             React.createElement(
                                 'dd',
                                 null,
                                 this.props.destinationName
+                            ),
+                            React.createElement(
+                                'dt',
+                                null,
+                                'Origin Terminal'
+                            ),
+                            React.createElement(
+                                'dd',
+                                null,
+                                this.props.originTerminal
                             ),
                             React.createElement(
                                 'dt',
@@ -624,6 +639,7 @@ var ResultItem = React.createClass({
     },
     render: function render() {
         var expandedDiv = this.getExpandedDiv();
+
         return React.createElement(
             'div',
             { className: 'panel panel-default' },
