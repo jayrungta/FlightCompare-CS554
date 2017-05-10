@@ -53,10 +53,12 @@ const ResultItem = React.createClass({
                         <dd>{this.props.flightNo}</dd>
                         <dt>Origin</dt>
                         <dd>{this.props.originName}</dd>
-                        <dt>Destination</dt>
-                        <dd>{this.props.destinationName}</dd>
                         <dt>Origin Terminal</dt>
                         <dd>{this.props.originTerminal}</dd>
+                        <dt>Destination</dt>
+                        <dd>{this.props.destinationName}</dd>
+                        <dt>Destination Terminal</dt>
+                        <dd>{this.props.destinationTerminal}</dd>
                         <dt>Meal</dt>
                         <dd>{this.props.meal}</dd>
                     </dl>

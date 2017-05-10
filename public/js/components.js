@@ -511,6 +511,16 @@ var ResultItem = React.createClass({
                             React.createElement(
                                 'dt',
                                 null,
+                                'Origin Terminal'
+                            ),
+                            React.createElement(
+                                'dd',
+                                null,
+                                this.props.originTerminal
+                            ),
+                            React.createElement(
+                                'dt',
+                                null,
                                 'Destination'
                             ),
                             React.createElement(
@@ -521,12 +531,12 @@ var ResultItem = React.createClass({
                             React.createElement(
                                 'dt',
                                 null,
-                                'Origin Terminal'
+                                'Destination Terminal'
                             ),
                             React.createElement(
                                 'dd',
                                 null,
-                                this.props.originTerminal
+                                this.props.destinationTerminal
                             ),
                             React.createElement(
                                 'dt',
@@ -682,7 +692,8 @@ var SearchResults = React.createClass({
                 meal: result.meal,
                 originName: result.originName,
                 destinationName: result.destinationName,
-                originTerminal: result.originTerminal
+                originTerminal: result.originTerminal,
+                destinationTerminal: result.destinationTerminal
             });
         });
         return React.createElement(

@@ -32,6 +32,7 @@ const SearchResults = React.createClass({
                 originName = {result.originName}
                 destinationName = {result.destinationName}
                 originTerminal = {result.originTerminal}
+                destinationTerminal = {result.destinationTerminal}
               />
          );
         });
