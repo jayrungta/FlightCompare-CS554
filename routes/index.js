@@ -10,7 +10,7 @@ const constructorMethod = (app) => {
 
     app.use("/posts", postRoutes);
 
-    router.get("/displayPDF", (req, res) => {
+    app.get("/displayPDF", (req, res) => {
         var tempFile = "./out.pdf";
         fs.readFile(tempFile, function (err, data) {
             res.contentType("application/pdf");

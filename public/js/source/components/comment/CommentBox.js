@@ -23,7 +23,7 @@ class CommentBox extends Component {
 
     handleCommentSubmit(comment) {
         let newComment = {
-            userId: this.props.userId,
+            userId: 0, // TODO
             flightId: this.props.flightNo,
             text: comment.text,
             timestamp: comment.time

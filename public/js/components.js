@@ -528,7 +528,6 @@ var ResultItem = React.createClass({
     },
 
     getExpandedDiv: function getExpandedDiv() {
-        // i think here we should call <CommentBox flightNo = {this.props.flightNo}>
         if (this.state.expanded) {
             return React.createElement(
                 'div',
@@ -605,7 +604,11 @@ var ResultItem = React.createClass({
                             )
                         )
                     ),
-                    React.createElement('div', { className: 'col-md-4' })
+                    React.createElement(
+                        'div',
+                        { className: 'col-md-4' },
+                        React.createElement(CommentBox, { userId: this.props.userId, flightNo: this.props.flightNo })
+                    )
                 ),
                 React.createElement(
                     'div',
@@ -1079,8 +1082,7 @@ var CommentBox = function (_Component) {
             var _this2 = this;
 
             _jquery2.default.ajax({
-                //TODO get comments from this url
-                url: "/where/flightNo", // but where?
+                url: '/posts/' + this.props.flightNo,
                 dataType: 'json',
                 cache: false,
                 success: function success(data) {
@@ -1094,12 +1096,17 @@ var CommentBox = function (_Component) {
     }, {
         key: 'handleCommentSubmit',
         value: function handleCommentSubmit(comment) {
-            var comments = this.state.data;
+            var newComment = {
+                userId: 0, // TODO
+                flightId: this.props.flightNo,
+                text: comment.text,
+                timestamp: comment.time
+            };
             _jquery2.default.ajax({
-                url: "/where/flightNo", // and this
+                url: "/posts",
                 dataType: 'json',
                 type: 'POST',
-                data: comment,
+                data: newComment,
                 success: function success(data) {
                     loadCommentsFromServer();
                 },
