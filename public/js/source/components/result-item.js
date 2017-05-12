@@ -95,7 +95,6 @@ const ResultItem = React.createClass({
         return normalString;
     },
     getExpandedDiv: function () {
-        // i think here we should call <CommentBox flightNo = {this.props.flightNo}>
         if (this.state.expanded) {
             return <div><br />
                 <div className="row">
@@ -116,7 +115,7 @@ const ResultItem = React.createClass({
                         </dl>
                     </div>
                     <div className="col-md-4">
-                        {/*<CommentBox flightNo={this.props.flightNo} />*/}
+                        <CommentBox userId={this.props.userId} flightNo={this.props.flightNo} />
                     </div>
                 </div>
                 <div className="row">

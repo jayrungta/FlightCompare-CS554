@@ -11,11 +11,10 @@ class CommentBox extends Component {
 
     loadCommentsFromServer() {
         $.ajax({
-            //TODO get comments from this url
-            url: "/where/flightNo", // but where?
+            url: `/posts/${this.props.flightNo}`,
             dataType: 'json',
             cache: false,
-            success: (data) => { this.setState({data}); },
+            success: (data) => { this.setState({ data }); },
             error: (xhr, status, err) => {
                 console.error(status, err.toString());
             }
@@ -23,12 +22,17 @@ class CommentBox extends Component {
     }
 
     handleCommentSubmit(comment) {
-        const comments = this.state.data;
+        let newComment = {
+            userId: this.props.userId,
+            flightId: this.props.flightNo,
+            text: comment.text,
+            timestamp: comment.time
+        }
         $.ajax({
-            url: "/where/flightNo", // and this
+            url: "/posts",
             dataType: 'json',
             type: 'POST',
-            data: comment,
+            data: newComment,
             success: (data) => { loadCommentsFromServer(); },
             error: (xhr, status, err) => {
                 console.error(status, err.toString());

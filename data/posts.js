@@ -7,6 +7,7 @@ module.exports = {
      * @param post.userId - Id of the user that posts.
      * @param post.flightId - Id of the flight on which the user posts.
      * @param post.text - Text of the post.
+     * @param post.timestamp - Timestamp of the post.
      * @returns id - Id of the newly added post.
      * @throws Will throw an error if user not found.
      */

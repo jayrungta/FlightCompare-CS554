@@ -9,6 +9,7 @@ module.exports = {
      * @param post.userId - Id of the user that posts.
      * @param post.flightId - Id of the flight on which the user posts.
      * @param post.text - Text of the post.
+     * @param post.timestamp - Timestamp of the post.
      * @returns id - Id of the newly added post.
      * @throws Will throw an error if user not found.
      */
@@ -16,7 +17,6 @@ module.exports = {
         let postsCollection = await posts();
         let user = await users.getUserById(post.userId);
 
-        // TODO: add more info
         let newPost = {
             _id: uuid.v4(),
             user: {
@@ -26,7 +26,8 @@ module.exports = {
             flight: {
                 id: post.flightId
             },
-            text: xss(post.text)
+            text: xss(post.text),
+            timestamp: post.timestamp
         };
         let insertedPost = await postsCollection.insertOne(newPost);
         return insertedPost.insertedId;
