@@ -973,29 +973,46 @@ var SearchForm = React.createClass({
     }
 });
 ReactDOM.render(React.createElement(SearchForm, null), document.getElementById('search'));
-"use strict";
+'use strict';
 
 var Comment = React.createClass({
-  displayName: "Comment",
+  displayName: 'Comment',
+  timeRender: function timeRender(date) {
+    var commentDate = new Date(date);
+    var today = new Date();
+
+    if (commentDate.getFullYear() == today.getFullYear() && commentDate.getMonth() == today.getMonth() && commentDate.getDate() == today.getDate()) {
+      var hours = commentDate.getHours();
+      var minutes = commentDate.getMinutes();
+      var ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      return hours + ':' + minutes + ' ' + ampm;
+    }
+
+    return commentDate.toLocaleDateString('en-US');
+  },
   render: function render() {
     var comment = this.props.comment;
+
     return React.createElement(
-      "div",
-      { className: "comment" },
+      'div',
+      { className: 'comment' },
       React.createElement(
-        "p",
-        { className: "commentText" },
+        'p',
+        { className: 'commentText' },
         comment.text
       ),
       React.createElement(
-        "p",
-        { className: "commentTime" },
-        comment.time
+        'small',
+        { className: 'commentTime' },
+        this.timeRender(comment.timestamp)
       ),
       React.createElement(
-        "p",
-        { className: "commentAuthor" },
-        comment.author
+        'p',
+        { className: 'commentAuthor' },
+        comment.user.name
       )
     );
   }
@@ -1083,7 +1100,7 @@ var CommentForm = React.createClass({
         var newComment = {
           userId: user._id,
           text: text,
-          timestamp: new Date()
+          timestamp: new Date().toJSON()
         };
         _this.props.onCommentSubmit(newComment);
         _this.setState({ text: '' });

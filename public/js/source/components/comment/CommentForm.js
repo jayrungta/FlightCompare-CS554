@@ -22,7 +22,7 @@ const CommentForm = React.createClass({
         let newComment = {
           userId: user._id,
           text: text,
-          timestamp: new Date()
+          timestamp: (new Date()).toJSON()
         }
         this.props.onCommentSubmit(newComment);
         this.setState({ text: '' });
