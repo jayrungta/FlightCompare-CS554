@@ -529,7 +529,7 @@ var ResultItem = React.createClass({
                     { className: 'row' },
                     React.createElement(
                         'div',
-                        { className: 'col-md-6' },
+                        { className: 'col-md-8' },
                         React.createElement(
                             'dl',
                             { className: 'dl-horizontal' },
@@ -597,7 +597,7 @@ var ResultItem = React.createClass({
                     ),
                     React.createElement(
                         'div',
-                        { className: 'col-md-6' },
+                        { className: 'col-md-4' },
                         React.createElement(CommentBox, { flightNo: this.props.flightNo })
                     )
                 ),
@@ -993,7 +993,6 @@ ReactDOM.render(React.createElement(SearchForm, null), document.getElementById('
 
 var Comment = React.createClass({
   displayName: 'Comment',
-<<<<<<< HEAD
   timeRender: function timeRender(date) {
     var commentDate = new Date(date);
     var today = new Date();
@@ -1023,49 +1022,14 @@ var Comment = React.createClass({
       ),
       React.createElement(
         'small',
-        { className: 'commentTime' },
+        { className: 'commentTime text-right' },
         this.timeRender(comment.timestamp)
       ),
       React.createElement(
         'p',
-        { className: 'commentAuthor' },
+        { className: 'commentAuthor text-right' },
+        '- ',
         comment.user.name
-=======
-  formatAMPM: function formatAMPM(date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    var strTime = hours + ':' + minutes + ' ' + ampm;
-    var m = date.getMonth() + 1;
-    var d = date.getDate();
-    var y = date.getFullYear();
-    var dt = m + "/" + d + "/" + y;
-    return dt + "   " + strTime;
-  },
-  render: function render() {
-    var comment = this.props.comment;
-    console.log(comment);
-    return React.createElement(
-      'div',
-      { className: 'panel panel-default comment' },
-      React.createElement(
-        'p',
-        { className: 'commentText' },
-        comment.text,
-        React.createElement('br', null),
-        'by ',
-        comment.user.name,
-        ' ',
-        React.createElement(
-          'small',
-          null,
-          'on ',
-          this.formatAMPM(new Date(comment.timestamp))
-        )
->>>>>>> c7fb6492508cabf383dfe5966f605a0a64f4d35b
       )
     );
   }

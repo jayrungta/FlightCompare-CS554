@@ -93,7 +93,7 @@ const ResultItem = React.createClass({
         if (this.state.expanded) {
             return <div><br />
                 <div className="row">
-                    <div className="col-md-6">
+                    <div className="col-md-8">
                         <dl className="dl-horizontal">
                             <dt>Flight Number</dt>
                             <dd>{this.props.flightNo}</dd>
@@ -109,7 +109,7 @@ const ResultItem = React.createClass({
                             <dd>{this.props.meal}</dd>
                         </dl>
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-4">
                         <CommentBox flightNo={this.props.flightNo} />
                     </div>
                 </div>
