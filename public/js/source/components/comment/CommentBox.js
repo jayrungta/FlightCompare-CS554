@@ -36,7 +36,7 @@ const CommentBox = React.createClass({
     render() {
         return (
             <div className="commentBox">
-                <p>Comments</p>
+                <p>What our users say about this flight:</p>
                 <CommentList comments={this.state.data} />
                 <CommentForm onCommentSubmit={this.handleCommentSubmit.bind(this)} />
             </div>

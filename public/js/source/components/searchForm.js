@@ -29,6 +29,30 @@ const SearchForm = React.createClass({
                 return 'Max Price: $' + value;
             }
         });
+
+        $.ajax({
+            type: "GET",
+            url: "/airports",
+            success: (results) => {
+                var availableTags = results;
+                $("#origin").autocomplete({
+                    source: availableTags,
+                    delay: 0,
+                    options: {
+                        /* override default values here */
+                        minLength: 3
+                    }
+                });
+                $("#destination").autocomplete({
+                    source: availableTags,
+                    delay: 0
+                });
+            },
+            error: (xhr, status, err) => {
+                this.setState({ error: xhr.responseText });
+                console.error(status, err.toString());
+            }
+        });
     },
 
     onSearch(event) {
@@ -39,7 +63,10 @@ const SearchForm = React.createClass({
             date = this.state.ddate;
         else
             date = $("#ddate").val();
-        let newQuery = { origin: this.state.query.origin, destination: this.state.query.destination, date: date, adultCount: this.state.query.adultCount, maxPrice: this.state.query.maxPrice };
+
+        let og = $("#origin").val().slice(0, 3);
+        let dest = $("#destination").val().slice(0, 3);
+        let newQuery = { origin: og, destination: dest, date: date, adultCount: this.state.query.adultCount, maxPrice: this.state.query.maxPrice };
         $.ajax({
             type: "POST",
             url: "/search",
@@ -65,8 +92,10 @@ const SearchForm = React.createClass({
     },
     render() {
         return (
-            // <p>Search flight form coming soon!</p>
             <div className="searchContainer">
+                <a href="/logout" className="logout btn btn-default btn-sm">
+                    <span className="glyphicon glyphicon-log-out"></span> Log out
+                 </a>
                 <div className="searchPanel panel panel-default col-xs-8 ">
                     <div className="panel-body">
                         <form onSubmit={this.onSearch} className="form-horizontal col-xs-12 searchForm">
@@ -75,11 +104,11 @@ const SearchForm = React.createClass({
                             <div className="row">
                                 <div className="form-group inputDiv col-md-4" style={{ "margin-left": "10px" }}>
                                     <label className="control-label" htmlFor="origin">Origin</label>
-                                    <input id="origin" name="origin" type="text" placeholder="Where are you flying from?" className="form-control input-md" required="true" onChange={this.onChange} value={this.state.query.origin} />
+                                    <input id="origin" name="origin" type="text" placeholder="Where are you flying from?" className="form-control input-md" required="true" />
                                 </div>
                                 <div className="form-group inputDiv col-md-4" style={{ "margin-left": "10px" }}>
                                     <label className="control-label" htmlFor="destination">Destination</label>
-                                    <input id="destination" name="destination" type="text" placeholder="Where are you flying to?" className="form-control input-md" required="true" onChange={this.onChange} value={this.state.query.destination} />
+                                    <input id="destination" name="destination" type="text" placeholder="Where are you flying to?" className="form-control input-md" required="true" />
                                 </div>
                             </div>
                             <div className="row">
@@ -125,6 +154,7 @@ const SearchForm = React.createClass({
         );
     }
 });
+
 ReactDOM.render(
     <SearchForm />, document.getElementById('search'));
 

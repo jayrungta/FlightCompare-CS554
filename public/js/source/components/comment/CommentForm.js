@@ -49,7 +49,9 @@ const CommentForm = React.createClass({
             onChange={this.handleTextChange.bind(this)}
           ></textarea>
         </div>
-        <input className="btn btn-default" type="submit" value="Comment" />
+        <div className="form-group">
+          <input className="btn btn-default" type="submit" value="Comment" />
+        </div>
       </form>
     )
   }
