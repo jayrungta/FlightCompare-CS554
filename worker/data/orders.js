@@ -15,8 +15,8 @@ module.exports = {
     addOrder: async (params) => {
         let { order } = params;
         let ordersCollection = await orders();
-        let user = await users.getUserById(order.userId);
-        let flight = await flights.getFlightById(order.flightId);
+        let user = await users.getUserById({ id: order.userId });
+        let flight = await flights.getFlightById({ id: order.flightId });
 
         // TODO: add more info
         let newOrder = {

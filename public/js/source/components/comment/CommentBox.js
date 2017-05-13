@@ -19,10 +19,10 @@ const CommentBox = React.createClass({
         comment.flightId = this.props.flightNo;
         $.ajax({
             url: "/posts",
-            dataType: 'json',
+            dataType: 'html',
             type: 'POST',
             data: comment,
-            success: (data) => { loadCommentsFromServer(); },
+            success: () => { this.loadCommentsFromServer(); },
             error: (xhr, status, err) => {
                 console.error(status, err.toString());
             }

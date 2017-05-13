@@ -25,12 +25,6 @@ module.exports = {
         return insertedUser.insertedId;
     },
 
-    // TODO: add more
-    updateUser: async (params) => {
-        let { id, newUserData } = params;
-        return newUserData;
-    },
-
     /**
      * @returns id - Id of the newly deleted user.
      * @throws Will throw an error if delete fails.

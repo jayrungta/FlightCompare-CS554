@@ -1023,14 +1023,16 @@ var CommentBox = React.createClass({
         });
     },
     handleCommentSubmit: function handleCommentSubmit(comment) {
+        var _this2 = this;
+
         comment.flightId = this.props.flightNo;
         $.ajax({
             url: "/posts",
-            dataType: 'json',
+            dataType: 'html',
             type: 'POST',
             data: comment,
-            success: function success(data) {
-                loadCommentsFromServer();
+            success: function success() {
+                _this2.loadCommentsFromServer();
             },
             error: function error(xhr, status, err) {
                 console.error(status, err.toString());

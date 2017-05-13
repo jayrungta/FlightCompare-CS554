@@ -15,18 +15,6 @@ module.exports = {
     },
 
     /**
-     * @returns id - Id of the newly updated user.
-     */
-    updateUser: async (id, newUserData) => {
-        return await nrpSender.sendMessage({
-            id: uuid.v4(),
-            collection: "users",
-            operation: "updateUser",
-            params: { id, newUserData }
-        });
-    },
-
-    /**
      * @returns id - Id of the newly deleted user.
      * @throws Will throw an error if delete fails.
      */

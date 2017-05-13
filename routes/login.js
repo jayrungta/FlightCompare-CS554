@@ -34,7 +34,7 @@ router.get("/", (req, res) => {
     if (req.user)
         res.redirect("/search");
     else
-    res.render("login", {})
+        res.render("login", {});
 });
 
 // router.post('/',

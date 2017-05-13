@@ -16,7 +16,7 @@ module.exports = {
     addPost: async (params) => {
         let { post } = params;
         let postsCollection = await posts();
-        let user = await users.getUserById(post.userId);
+        let user = await users.getUserById({ id: post.userId });
 
         let newPost = {
             _id: uuid.v4(),
