@@ -504,10 +504,9 @@ var ResultItem = React.createClass({
                     console.log("print success");
                     //this.pdfView();
                     setTimeout(function () {
-                        window.open("displayPDF", "_blank");
+                        var myWin = window.open("displayPDF", "_blank");
+                        if (myWin == undefined) alert('Please disable your popup blocker and try again!');
                     }, 2000);
-
-                    // this.setState({ results: results, printed: true });
                 },
                 error: function error(xhr, status, err) {
                     this.setState({ error: xhr.responseText });
@@ -519,14 +518,6 @@ var ResultItem = React.createClass({
     doTrack: function doTrack() {
         alert('Track');
     },
-    doBook: function doBook() {
-        // alert('Book');
-
-    },
-    getGoogleTerm: function getGoogleTerm(normalString) {
-        return normalString;
-    },
-
     getExpandedDiv: function getExpandedDiv() {
         if (this.state.expanded) {
             return React.createElement(
@@ -538,7 +529,7 @@ var ResultItem = React.createClass({
                     { className: 'row' },
                     React.createElement(
                         'div',
-                        { className: 'col-md-4' },
+                        { className: 'col-md-6' },
                         React.createElement(
                             'dl',
                             { className: 'dl-horizontal' },
@@ -606,7 +597,7 @@ var ResultItem = React.createClass({
                     ),
                     React.createElement(
                         'div',
-                        { className: 'col-md-4' },
+                        { className: 'col-md-6' },
                         React.createElement(CommentBox, { flightNo: this.props.flightNo })
                     )
                 ),
@@ -624,13 +615,7 @@ var ResultItem = React.createClass({
                         '\xA0',
                         React.createElement(
                             'a',
-                            { className: 'btn btn-default', onClick: this.doTrack },
-                            'Track'
-                        ),
-                        '\xA0',
-                        React.createElement(
-                            'a',
-                            { className: 'btn btn-default', href: "http://www.google.com/search?q=" + this.props.airlineName + "&btnI", target: '_blank', onClick: this.doBook },
+                            { className: 'btn btn-default', href: "http://www.google.com/search?q=" + this.props.airlineName + "&btnI", target: '_blank' },
                             'Book'
                         )
                     )
@@ -796,6 +781,30 @@ var SearchForm = React.createClass({
                 return 'Max Price: $' + value;
             }
         });
+
+        $.ajax({
+            type: "GET",
+            url: "/airports",
+            success: function success(results) {
+                var availableTags = results;
+                $("#origin").autocomplete({
+                    source: availableTags,
+                    delay: 0,
+                    options: {
+                        /* override default values here */
+                        minLength: 3
+                    }
+                });
+                $("#destination").autocomplete({
+                    source: availableTags,
+                    delay: 0
+                });
+            },
+            error: function error(xhr, status, err) {
+                _this.setState({ error: xhr.responseText });
+                console.error(status, err.toString());
+            }
+        });
     },
     onSearch: function onSearch(event) {
         var _this2 = this;
@@ -804,7 +813,10 @@ var SearchForm = React.createClass({
         this.setState({ errors: "", errorFlag: false });
         var date = void 0;
         if (this.state.ddate) date = this.state.ddate;else date = $("#ddate").val();
-        var newQuery = { origin: this.state.query.origin, destination: this.state.query.destination, date: date, adultCount: this.state.query.adultCount, maxPrice: this.state.query.maxPrice };
+
+        var og = $("#origin").val().slice(0, 3);
+        var dest = $("#destination").val().slice(0, 3);
+        var newQuery = { origin: og, destination: dest, date: date, adultCount: this.state.query.adultCount, maxPrice: this.state.query.maxPrice };
         $.ajax({
             type: "POST",
             url: "/search",
@@ -829,173 +841,192 @@ var SearchForm = React.createClass({
         });
     },
     render: function render() {
-        return (
-            // <p>Search flight form coming soon!</p>
+        return React.createElement(
+            'div',
+            { className: 'searchContainer' },
+            React.createElement(
+                'a',
+                { href: '/logout', className: 'logout btn btn-default btn-sm' },
+                React.createElement('span', { className: 'glyphicon glyphicon-log-out' }),
+                ' Log out'
+            ),
             React.createElement(
                 'div',
-                { className: 'searchContainer' },
+                { className: 'searchPanel panel panel-default col-xs-8 ' },
                 React.createElement(
                     'div',
-                    { className: 'searchPanel panel panel-default col-xs-8 ' },
+                    { className: 'panel-body' },
                     React.createElement(
-                        'div',
-                        { className: 'panel-body' },
+                        'form',
+                        { onSubmit: this.onSearch, className: 'form-horizontal col-xs-12 searchForm' },
+                        React.createElement('fieldset', null),
                         React.createElement(
-                            'form',
-                            { onSubmit: this.onSearch, className: 'form-horizontal col-xs-12 searchForm' },
-                            React.createElement('fieldset', null),
+                            'legend',
+                            null,
+                            'Search Flights'
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'row' },
                             React.createElement(
-                                'legend',
-                                null,
-                                'Search Flights'
+                                'div',
+                                { className: 'form-group inputDiv col-md-4', style: { "margin-left": "10px" } },
+                                React.createElement(
+                                    'label',
+                                    { className: 'control-label', htmlFor: 'origin' },
+                                    'Origin'
+                                ),
+                                React.createElement('input', { id: 'origin', name: 'origin', type: 'text', placeholder: 'Where are you flying from?', className: 'form-control input-md', required: 'true' })
                             ),
                             React.createElement(
                                 'div',
-                                { className: 'row' },
+                                { className: 'form-group inputDiv col-md-4', style: { "margin-left": "10px" } },
                                 React.createElement(
-                                    'div',
-                                    { className: 'form-group inputDiv col-md-4', style: { "margin-left": "10px" } },
-                                    React.createElement(
-                                        'label',
-                                        { className: 'control-label', htmlFor: 'origin' },
-                                        'Origin'
-                                    ),
-                                    React.createElement('input', { id: 'origin', name: 'origin', type: 'text', placeholder: 'Where are you flying from?', className: 'form-control input-md', required: 'true', onChange: this.onChange, value: this.state.query.origin })
+                                    'label',
+                                    { className: 'control-label', htmlFor: 'destination' },
+                                    'Destination'
                                 ),
+                                React.createElement('input', { id: 'destination', name: 'destination', type: 'text', placeholder: 'Where are you flying to?', className: 'form-control input-md', required: 'true' })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'row' },
+                            React.createElement(
+                                'div',
+                                { className: 'form-group inputDiv col-md-4 ', style: { "margin-left": "10px" } },
                                 React.createElement(
-                                    'div',
-                                    { className: 'form-group inputDiv col-md-4', style: { "margin-left": "10px" } },
-                                    React.createElement(
-                                        'label',
-                                        { className: 'control-label', htmlFor: 'destination' },
-                                        'Destination'
-                                    ),
-                                    React.createElement('input', { id: 'destination', name: 'destination', type: 'text', placeholder: 'Where are you flying to?', className: 'form-control input-md', required: 'true', onChange: this.onChange, value: this.state.query.destination })
-                                )
+                                    'label',
+                                    { className: 'control-label', htmlFor: 'ddate' },
+                                    'Departure Date'
+                                ),
+                                React.createElement('input', { id: 'ddate', name: 'ddate', type: 'date', placeholder: 'Select departure date', className: 'form-control input-md', required: 'true', onChange: this.onChange, value: this.state.query.ddate })
                             ),
                             React.createElement(
                                 'div',
-                                { className: 'row' },
+                                { className: 'form-group inputDiv col-md-3', style: { "margin-left": "10px" } },
                                 React.createElement(
-                                    'div',
-                                    { className: 'form-group inputDiv col-md-4 ', style: { "margin-left": "10px" } },
-                                    React.createElement(
-                                        'label',
-                                        { className: 'control-label', htmlFor: 'ddate' },
-                                        'Departure Date'
-                                    ),
-                                    React.createElement('input', { id: 'ddate', name: 'ddate', type: 'date', placeholder: 'Select departure date', className: 'form-control input-md', required: 'true', onChange: this.onChange, value: this.state.query.ddate })
+                                    'label',
+                                    { className: 'control-label', htmlFor: 'adultCount' },
+                                    'No. of Adults'
                                 ),
                                 React.createElement(
-                                    'div',
-                                    { className: 'form-group inputDiv col-md-3', style: { "margin-left": "10px" } },
+                                    'select',
+                                    { id: 'adultCount', name: 'adultCount', className: 'form-control', onChange: this.onChange, value: this.state.query.adultCount },
                                     React.createElement(
-                                        'label',
-                                        { className: 'control-label', htmlFor: 'adultCount' },
-                                        'No. of Adults'
+                                        'option',
+                                        { value: '1' },
+                                        '1'
                                     ),
                                     React.createElement(
-                                        'select',
-                                        { id: 'adultCount', name: 'adultCount', className: 'form-control', onChange: this.onChange, value: this.state.query.adultCount },
-                                        React.createElement(
-                                            'option',
-                                            { value: '1' },
-                                            '1'
-                                        ),
-                                        React.createElement(
-                                            'option',
-                                            { value: '2' },
-                                            '2'
-                                        ),
-                                        React.createElement(
-                                            'option',
-                                            { value: '3' },
-                                            '3'
-                                        ),
-                                        React.createElement(
-                                            'option',
-                                            { value: '4' },
-                                            '4'
-                                        ),
-                                        React.createElement(
-                                            'option',
-                                            { value: '5' },
-                                            '5'
-                                        ),
-                                        React.createElement(
-                                            'option',
-                                            { value: '6' },
-                                            '6'
-                                        )
+                                        'option',
+                                        { value: '2' },
+                                        '2'
+                                    ),
+                                    React.createElement(
+                                        'option',
+                                        { value: '3' },
+                                        '3'
+                                    ),
+                                    React.createElement(
+                                        'option',
+                                        { value: '4' },
+                                        '4'
+                                    ),
+                                    React.createElement(
+                                        'option',
+                                        { value: '5' },
+                                        '5'
+                                    ),
+                                    React.createElement(
+                                        'option',
+                                        { value: '6' },
+                                        '6'
                                     )
                                 )
-                            ),
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'row' },
                             React.createElement(
                                 'div',
-                                { className: 'row' },
+                                { className: 'form-group inputDiv col-md-4 ', style: { "margin-left": "10px" } },
                                 React.createElement(
-                                    'div',
-                                    { className: 'form-group inputDiv col-md-4 ', style: { "margin-left": "10px" } },
-                                    React.createElement(
-                                        'label',
-                                        { className: 'control-label', htmlFor: 'maxPrice' },
-                                        'Max Price'
-                                    ),
-                                    React.createElement('input', { id: 'maxPrice', name: 'maxPrice', 'data-slider-id': 'maxPrice', type: 'text', 'data-slider-min': '0', 'data-slider-max': '1000', 'data-slider-step': '1', 'data-slider-value': '0', className: 'form-control input-md', onChange: this.onChange, value: this.state.query.origin }),
-                                    React.createElement('br', null),
-                                    React.createElement('help', { className: 'maxPriceDisp', id: 'maxPriceDisp', name: 'maxPriceDisp' })
-                                )
-                            ),
+                                    'label',
+                                    { className: 'control-label', htmlFor: 'maxPrice' },
+                                    'Max Price'
+                                ),
+                                React.createElement('input', { id: 'maxPrice', name: 'maxPrice', 'data-slider-id': 'maxPrice', type: 'text', 'data-slider-min': '0', 'data-slider-max': '1000', 'data-slider-step': '1', 'data-slider-value': '0', className: 'form-control input-md', onChange: this.onChange, value: this.state.query.origin }),
+                                React.createElement('br', null),
+                                React.createElement('help', { className: 'maxPriceDisp', id: 'maxPriceDisp', name: 'maxPriceDisp' })
+                            )
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'row' },
                             React.createElement(
                                 'div',
-                                { className: 'row' },
-                                React.createElement(
-                                    'div',
-                                    { className: 'form-group inputDiv col-md-4', style: { "margin-left": "10px" } },
-                                    React.createElement('input', { className: 'btn btn-default', type: 'submit', value: 'Search' })
-                                )
+                                { className: 'form-group inputDiv col-md-4', style: { "margin-left": "10px" } },
+                                React.createElement('input', { className: 'btn btn-default', type: 'submit', value: 'Search' })
                             )
                         )
                     )
-                ),
+                )
+            ),
+            React.createElement(
+                'div',
+                { className: this.state.error == '' ? 'hidden' : 'panel panel-error col-xs-8 show' },
                 React.createElement(
                     'div',
-                    { className: this.state.error == '' ? 'hidden' : 'panel panel-error col-xs-8 show' },
-                    React.createElement(
-                        'div',
-                        { className: 'panel-body' },
-                        this.state.error
-                    )
-                ),
-                React.createElement(SearchResults, { results: this.state.results })
-            )
+                    { className: 'panel-body' },
+                    this.state.error
+                )
+            ),
+            React.createElement(SearchResults, { results: this.state.results })
         );
     }
 });
+
 ReactDOM.render(React.createElement(SearchForm, null), document.getElementById('search'));
-"use strict";
+'use strict';
 
 var Comment = React.createClass({
-  displayName: "Comment",
+  displayName: 'Comment',
+  formatAMPM: function formatAMPM(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    var m = date.getMonth() + 1;
+    var d = date.getDate();
+    var y = date.getFullYear();
+    var dt = m + "/" + d + "/" + y;
+    return dt + "   " + strTime;
+  },
   render: function render() {
     var comment = this.props.comment;
+    console.log(comment);
     return React.createElement(
-      "div",
-      { className: "comment" },
+      'div',
+      { className: 'panel panel-default comment' },
       React.createElement(
-        "p",
-        { className: "commentText" },
-        comment.text
-      ),
-      React.createElement(
-        "p",
-        { className: "commentTime" },
-        comment.time
-      ),
-      React.createElement(
-        "p",
-        { className: "commentAuthor" },
-        comment.author
+        'p',
+        { className: 'commentText' },
+        comment.text,
+        React.createElement('br', null),
+        'by ',
+        comment.user.name,
+        ' ',
+        React.createElement(
+          'small',
+          null,
+          'on ',
+          this.formatAMPM(new Date(comment.timestamp))
+        )
       )
     );
   }
@@ -1049,7 +1080,7 @@ var CommentBox = React.createClass({
             React.createElement(
                 'p',
                 null,
-                'Comments'
+                'What our users say about this flight:'
             ),
             React.createElement(CommentList, { comments: this.state.data }),
             React.createElement(CommentForm, { onCommentSubmit: this.handleCommentSubmit.bind(this) })
@@ -1115,7 +1146,11 @@ var CommentForm = React.createClass({
           onChange: this.handleTextChange.bind(this)
         })
       ),
-      React.createElement('input', { className: 'btn btn-default', type: 'submit', value: 'Comment' })
+      React.createElement(
+        'div',
+        { className: 'form-group' },
+        React.createElement('input', { className: 'btn btn-default', type: 'submit', value: 'Comment' })
+      )
     );
   }
 });

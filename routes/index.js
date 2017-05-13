@@ -2,6 +2,7 @@ const loginRoutes = require("./login");
 const searchRoutes = require("./search");
 const postRoutes = require("./posts");
 const fs = require("fs");
+const readline = require('readline');
 
 const constructorMethod = (app) => {
     app.use("/login", loginRoutes);
@@ -16,6 +17,28 @@ const constructorMethod = (app) => {
             res.contentType("application/pdf");
             res.send(data);
         });
+    });
+
+    app.get("/airports", (req, res) => {
+        var file = "./iata-airport-codes.txt";
+        const rl = readline.createInterface({
+            input: fs.createReadStream('./iata-airport-codes.txt')
+        });
+        let lines = [];
+        rl.on('line', (line) => {
+            lines.push (line.replace("\t"," - "));
+        });
+
+        rl.on('close', () => {
+            res.send(lines);
+        });
+    });
+
+    app.get("/logout", (req, res) => {
+        if (req.user) {
+            req.logout();
+            res.redirect("/");
+        }
     });
 
     app.get("/", (req, res) => {

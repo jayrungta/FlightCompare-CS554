@@ -22,7 +22,7 @@ const ResultItem = React.createClass({
         var hours = date.getHours();
         var minutes = date.getMinutes();
         var ampm = hours >= 12 ? 'pm' : 'am';
-        var month=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         hours = hours % 12;
         hours = hours ? hours : 12;
         minutes = minutes < 10 ? '0' + minutes : minutes;
@@ -73,9 +73,11 @@ const ResultItem = React.createClass({
                 success: function success(results) {
                     console.log("print success");
                     //this.pdfView();
-                    setTimeout(function(){ window.open("displayPDF","_blank"); }, 2000);
-                   
-                    // this.setState({ results: results, printed: true });
+                    setTimeout(function () {
+                        let myWin = window.open("displayPDF", "_blank");
+                        if (myWin == undefined)
+                            alert('Please disable your popup blocker and try again!');
+                    }, 2000);
                 },
                 error: function error(xhr, status, err) {
                     this.setState({ error: xhr.responseText });
@@ -87,18 +89,11 @@ const ResultItem = React.createClass({
     doTrack: function () {
         alert('Track');
     },
-    doBook: function () {
-        // alert('Book');
-
-    },
-    getGoogleTerm(normalString){
-        return normalString;
-    },
     getExpandedDiv: function () {
         if (this.state.expanded) {
             return <div><br />
                 <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-md-6">
                         <dl className="dl-horizontal">
                             <dt>Flight Number</dt>
                             <dd>{this.props.flightNo}</dd>
@@ -114,15 +109,15 @@ const ResultItem = React.createClass({
                             <dd>{this.props.meal}</dd>
                         </dl>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-6">
                         <CommentBox flightNo={this.props.flightNo} />
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-md-12">
-                    <a className="btn btn-default" onClick={this.doPrint}>Print</a>&#160;
-                    <a className="btn btn-default" onClick={this.doTrack}>Track</a>&#160;
-                    <a className="btn btn-default" href ={"http://www.google.com/search?q="+ this.props.airlineName+"&btnI"} target="_blank" onClick={this.doBook}>Book</a>
+                        <a className="btn btn-default" onClick={this.doPrint}>Print</a>&#160;
+                    {/*<a className="btn btn-default" onClick={this.doTrack}>Track</a>&#160;*/}
+                        <a className="btn btn-default" href={"http://www.google.com/search?q=" + this.props.airlineName + "&btnI"} target="_blank">Book</a>
                     </div>
                 </div>
             </div>;

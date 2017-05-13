@@ -17,8 +17,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/airlines", (req, res) => {
-    if(req.user){
-        //console.log(req.body);
+    if (req.user) {
         let airlineName = req.body.flight.airlineName;
         let origin = req.body.flight.origin;
         let destination = req.body.flight.destination;
@@ -31,7 +30,7 @@ router.post("/airlines", (req, res) => {
         let destinationName = req.body.flight.destinationName;
         let originTerminal = req.body.flight.originTerminal;
         let destinationTerminal = req.body.flight.destinationTerminal;
-        let meal = req.body.flight.meal === undefined ? "N/A": req.body.flight.meal;
+        let meal = req.body.flight.meal === undefined ? "N/A" : req.body.flight.meal;
 
 
         wkhtmlpdf(`<div class="container">
@@ -78,10 +77,12 @@ router.post("/airlines", (req, res) => {
             </div>
         </div>
     </div>
-</div>`, 
-                { userStyleSheet: 'public/css/print.css',
-                  pageSize: 'letter'})
-                .pipe(fs.createWriteStream('out.pdf'));
+</div>`,
+            {
+                userStyleSheet: 'public/css/print.css',
+                pageSize: 'letter'
+            })
+            .pipe(fs.createWriteStream('out.pdf'));
         res.json('Print success');
     }
     else
@@ -90,7 +91,7 @@ router.post("/airlines", (req, res) => {
 
 router.post('/', async (req, res) => {
     let adultCount = req.body.query.adultCount;
-    let maxPrice = "USD"+req.body.query.maxPrice;
+    let maxPrice = "USD" + req.body.query.maxPrice;
     let solutions = "20";
     let origin = req.body.query.origin;
     let destination = req.body.query.destination;
@@ -98,52 +99,11 @@ router.post('/', async (req, res) => {
 
     try {
         let flights = await flightData.searchFlights(adultCount, maxPrice, solutions, origin, destination, date);
-    
-        //console.log(flights);
-        /*
-        let flights = [ { airlineCode: 'VX',
-            airlineName: 'Virgin America Inc.',
-            price: 'USD183.20',
-            arrivalTime: '2017-10-12T19:17-07:00',
-            departureTime: '2017-10-12T16:05-04:00',
-            origin: 'EWR',
-            destination: 'LAX',
-            duration: 372,
-            flightNo: 'VX 1167',
-            destinationTerminal: '6',
-            originTerminal: 'A',
-            destinationTerminal: 'C',
-            originName: 'Newark Liberty International',
-            destinationName: 'Los Angeles International' },
-          { airlineCode: 'VX',
-            airlineName: 'Virgin America Inc.',
-            price: 'USD183.20',
-            arrivalTime: '2017-10-12T15:41-07:00',
-            departureTime: '2017-10-12T12:30-04:00',
-            origin: 'EWR',
-            destination: 'LAX',
-            duration: 371,
-            flightNo: 'VX 1165',
-            destinationTerminal: '6',
-            originTerminal: 'A',
-            destinationTerminal: 'B',
-            originName: 'Newark Liberty International',
-            destinationName: 'Los Angeles International' }]*/
-        
-        
         res.json(flights);
     }
     catch (err) {
         res.status(500).send(err);
     }
 });
-
-//  // Search flights
-//     flightData.searchFlights("1", "USD5000", "20", "NYC", "LAX", "2017-12-14").then((flights) => {
-//         console.log('done');
-//         console.log(flights);
-//     }).catch(function(error) {
-//         console.log(error);
-//     });
 
 module.exports = router;
