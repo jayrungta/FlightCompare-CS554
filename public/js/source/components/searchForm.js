@@ -38,14 +38,12 @@ const SearchForm = React.createClass({
                 $("#origin").autocomplete({
                     source: availableTags,
                     delay: 0,
-                    options: {
-                        /* override default values here */
-                        minLength: 3
-                    }
+                    minLength: 3
                 });
                 $("#destination").autocomplete({
                     source: availableTags,
-                    delay: 0
+                    delay: 0,
+                    minLength: 3
                 });
             },
             error: (xhr, status, err) => {

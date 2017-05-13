@@ -790,14 +790,12 @@ var SearchForm = React.createClass({
                 $("#origin").autocomplete({
                     source: availableTags,
                     delay: 0,
-                    options: {
-                        /* override default values here */
-                        minLength: 3
-                    }
+                    minLength: 3
                 });
                 $("#destination").autocomplete({
                     source: availableTags,
-                    delay: 0
+                    delay: 0,
+                    minLength: 3
                 });
             },
             error: function error(xhr, status, err) {
@@ -1021,9 +1019,13 @@ var Comment = React.createClass({
         comment.text
       ),
       React.createElement(
-        'small',
+        'p',
         { className: 'commentTime text-right' },
-        this.timeRender(comment.timestamp)
+        React.createElement(
+          'small',
+          null,
+          this.timeRender(comment.timestamp)
+        )
       ),
       React.createElement(
         'p',

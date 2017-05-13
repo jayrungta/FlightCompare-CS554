@@ -25,9 +25,9 @@ const Comment = React.createClass({
         <p className="commentText">
           {comment.text}
         </p>
-        <small className="commentTime text-right">
-          {this.timeRender(comment.timestamp)}
-        </small>
+        <p className="commentTime text-right">
+          <small>{this.timeRender(comment.timestamp)}</small>
+        </p>
         <p className="commentAuthor text-right">
           - {comment.user.name}
         </p>
