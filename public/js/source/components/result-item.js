@@ -115,7 +115,7 @@ const ResultItem = React.createClass({
                         </dl>
                     </div>
                     <div className="col-md-4">
-                        <CommentBox userId={this.props.userId} flightNo={this.props.flightNo} />
+                        <CommentBox flightNo={this.props.flightNo} />
                     </div>
                 </div>
                 <div className="row">

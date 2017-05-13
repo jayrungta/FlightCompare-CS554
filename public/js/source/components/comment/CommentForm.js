@@ -1,25 +1,38 @@
-import React, { Component } from 'react';
-
-class CommentForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { text: '' };
-  }
+const CommentForm = React.createClass({
+  getInitialState() {
+    return { text: '' };
+  },
 
   handleTextChange(e) {
     this.setState({ text: e.target.value });
-  }
+  },
 
   handleSubmit(e) {
     e.preventDefault();
-    const text = this.state.text.trim();
-    const time = new Date();
+    let text = this.state.text.trim();
     if (!text) {
       return;
     }
-    this.props.onCommentSubmit({ text: text, time: time });
-    this.setState({ text: '' });
-  }
+
+    $.ajax({
+      url: "/login/current",
+      dataType: 'json',
+      cache: false,
+      success: (user) => {
+        let newComment = {
+          userId: user._id,
+          text: text,
+          timestamp: new Date()
+        }
+        this.props.onCommentSubmit(newComment);
+        this.setState({ text: '' });
+      },
+      error: (xhr, status, err) => {
+        console.error(status, err.toString());
+      }
+    });
+
+  },
 
   render() {
     return (
@@ -40,6 +53,4 @@ class CommentForm extends Component {
       </form>
     )
   }
-}
-
-export default CommentForm;
+});

@@ -1,6 +1,4 @@
-import React, { Component } from 'react';
-
-class Comment extends Component {
+const Comment = React.createClass({
   render() {
     let comment = this.props.comment;
     return (
@@ -17,6 +15,4 @@ class Comment extends Component {
       </div>
     );
   }
-}
-
-export default Comment;
+});

@@ -1,13 +1,7 @@
-import React, { Component } from 'react';
-import CommentList from './CommentList';
-import CommentForm from './CommentForm';
-import $ from 'jquery';
-
-class CommentBox extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { data: [] };
-    }
+const CommentBox = React.createClass({
+    getInitialState() {
+        return { data: [] };
+    },
 
     loadCommentsFromServer() {
         $.ajax({
@@ -19,40 +13,33 @@ class CommentBox extends Component {
                 console.error(status, err.toString());
             }
         });
-    }
+    },
 
     handleCommentSubmit(comment) {
-        let newComment = {
-            userId: 0, // TODO
-            flightId: this.props.flightNo,
-            text: comment.text,
-            timestamp: comment.time
-        }
+        comment.flightId = this.props.flightNo;
         $.ajax({
             url: "/posts",
             dataType: 'json',
             type: 'POST',
-            data: newComment,
+            data: comment,
             success: (data) => { loadCommentsFromServer(); },
             error: (xhr, status, err) => {
                 console.error(status, err.toString());
             }
         });
-    }
+    },
 
     componentDidMount() {
         this.loadCommentsFromServer();
-    }
+    },
 
     render() {
         return (
             <div className="commentBox">
                 <p>Comments</p>
-                <CommentList comments={this.props.data} />
+                <CommentList comments={this.state.data} />
                 <CommentForm onCommentSubmit={this.handleCommentSubmit.bind(this)} />
             </div>
         );
     }
-}
-
-export default CommentBox;
+});

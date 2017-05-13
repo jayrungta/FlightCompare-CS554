@@ -13,7 +13,8 @@ module.exports = {
      * @returns id - Id of the newly added post.
      * @throws Will throw an error if user not found.
      */
-    addPost: async (post) => {
+    addPost: async (params) => {
+        let { post } = params;
         let postsCollection = await posts();
         let user = await users.getUserById(post.userId);
 
@@ -37,7 +38,8 @@ module.exports = {
      * @returns id - Id of the newly deleted post.
      * @throws Will throw an error if delete fails.
      */
-    deletePost: async (id) => {
+    deletePost: async (params) => {
+        let { id } = params;
         let postsCollection = await posts();
         let deletedPost = await postsCollection.deleteOne({ _id: id });
         if (deletedPost.deletedCount === 0)
@@ -49,7 +51,8 @@ module.exports = {
      * @returns {Object} post
      * @throws Will throw an error if post not found.
      */
-    getPostById: async (id) => {
+    getPostById: async (params) => {
+        let { id } = params;
         let postsCollection = await posts();
         let post = await postsCollection.findOne({ _id: id });
         if (!post)
@@ -60,7 +63,8 @@ module.exports = {
     /**
      * @returns {Object[]} postsOfUser
      */
-    getPostsByUser: async (userId) => {
+    getPostsByUser: async (params) => {
+        let { userId } = params;
         let postsCollection = await posts();
         let postsOfUser = await postsCollection.find({ 'user.id': userId }).toArray();
         return postsOfUser;
@@ -69,7 +73,8 @@ module.exports = {
     /**
      * @returns {Object[]} postsOfFlight
      */
-    getPostsByFlight: async (flightId) => {
+    getPostsByFlight: async (params) => {
+        let { flightId } = params;
         let postsCollection = await posts();
         let postsOfFlight = await postsCollection.find({ 'flight.id': flightId }).toArray();
         return postsOfFlight;

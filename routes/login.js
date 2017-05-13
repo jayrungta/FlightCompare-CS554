@@ -76,6 +76,13 @@ router.get('/check', (req, res) => {
         res.send(false);
 });
 
+router.get('/current', (req, res) => {
+    if (req.user)
+        res.json(req.user);
+    else
+        res.redirect('/login');
+});
+
 router.get("/register", (req, res) => {
     res.render("register", {})
 });

@@ -1,7 +1,4 @@
-import React, { Component } from 'react';
-import Comment from '../../components/Comment';
-
-class CommentList extends Component {
+const CommentList = React.createClass({
     render() {
         const commentNodes = this.props.comments.map((comment) => {
             return (
@@ -14,6 +11,4 @@ class CommentList extends Component {
             </div>
         );
     }
-}
-
-export default CommentList;
+});

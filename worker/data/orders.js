@@ -12,7 +12,8 @@ module.exports = {
      * @returns id - Id of the newly added order.
      * @throws Will throw an error if user of flight not found.
      */
-    addOrder: async (order) => {
+    addOrder: async (params) => {
+        let { order } = params;
         let ordersCollection = await orders();
         let user = await users.getUserById(order.userId);
         let flight = await flights.getFlightById(order.flightId);
@@ -39,7 +40,8 @@ module.exports = {
      * @returns id - Id of the newly updated order.
      * @throws Will throw an error if update fails.
      */
-    updateOrderStatus: async (id, status) => {
+    updateOrderStatus: async (params) => {
+        let { id, status } = params;
         let ordersCollection = await orders();
         let updatedOrder = await ordersCollection.updateOne({ _id: id },
             { $set: { status: status } });
@@ -52,7 +54,8 @@ module.exports = {
      * @returns id - Id of the newly deleted order.
      * @throws Will throw an error if delete fails.
      */
-    deleteOrder: async (id) => {
+    deleteOrder: async (params) => {
+        let { id } = params;
         let ordersCollection = await orders();
         let deletedOrder = await ordersCollection.deleteOne({ _id: id });
         if (deletedOrder.deletedCount === 0)
@@ -64,7 +67,8 @@ module.exports = {
      * @returns {Object} order
      * @throws Will throw an error if order not found.
      */
-    getOrderById: async (id) => {
+    getOrderById: async (params) => {
+        let { id } = params;
         let ordersCollection = await orders();
         let order = await ordersCollection.findOne({ _id: id });
         if (!order)
@@ -75,7 +79,8 @@ module.exports = {
     /**
      * @returns {Object[]} ordersOfUser
      */
-    getOrdersByUser: async (userId) => {
+    getOrdersByUser: async (params) => {
+        let { userId } = params;
         let ordersCollection = await orders();
         let ordersOfUser = await ordersCollection.find({ 'user.id': userId }).toArray();
         return ordersOfUser;
@@ -84,7 +89,8 @@ module.exports = {
     /**
      * @returns {Object[]} purchasedOrdersOfFlight
      */
-    getOrdersByFlightAndStatus: async (flightId, status) => {
+    getOrdersByFlightAndStatus: async (params) => {
+        let { flightId, status } = params;
         let ordersCollection = await orders();
         let ordersOfFlight = await ordersCollection.find({
             'flight.id': flightId,

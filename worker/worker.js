@@ -70,3 +70,5 @@ redisConnection.on("notifications:request:*", async (message) => {
         redisConnection.emit(failedEvent, { data: error });
     };
 });
+
+console.log("Workers running!");
