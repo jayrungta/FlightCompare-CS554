@@ -71,7 +71,7 @@ const ResultItem = React.createClass({
                     }
                 },
                 success: function success(results) {
-                    console.log("print success");
+                    console.log("Print success.");
                     //this.pdfView();
                     setTimeout(function () {
                         let myWin = window.open("displayPDF", "_blank");
@@ -93,7 +93,7 @@ const ResultItem = React.createClass({
         if (this.state.expanded) {
             return <div><br />
                 <div className="row">
-                    <div className="col-md-8">
+                    <div className="col-md-7">
                         <dl className="dl-horizontal">
                             <dt>Flight Number</dt>
                             <dd>{this.props.flightNo}</dd>
@@ -109,7 +109,7 @@ const ResultItem = React.createClass({
                             <dd>{this.props.meal}</dd>
                         </dl>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-5">
                         <CommentBox flightNo={this.props.flightNo} />
                     </div>
                 </div>

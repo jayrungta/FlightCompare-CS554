@@ -529,7 +529,7 @@ var ResultItem = React.createClass({
                     { className: 'row' },
                     React.createElement(
                         'div',
-                        { className: 'col-md-8' },
+                        { className: 'col-md-7' },
                         React.createElement(
                             'dl',
                             { className: 'dl-horizontal' },
@@ -597,7 +597,7 @@ var ResultItem = React.createClass({
                     ),
                     React.createElement(
                         'div',
-                        { className: 'col-md-4' },
+                        { className: 'col-md-5' },
                         React.createElement(CommentBox, { flightNo: this.props.flightNo })
                     )
                 ),
@@ -700,10 +700,10 @@ var ResultItem = React.createClass({
         );
     }
 });
-"use strict";
+'use strict';
 
 var SearchResults = React.createClass({
-    displayName: "SearchResults",
+    displayName: 'SearchResults',
     getInitialState: function getInitialState() {
         return {
             results: [],
@@ -715,6 +715,17 @@ var SearchResults = React.createClass({
     componentDidMount: function componentDidMount() {},
     componentWillReceiveProps: function componentWillReceiveProps(newProps) {
         this.setState({ results: newProps.results });
+    },
+    onChange: function onChange() {
+        var selected = $('#orderBySelection').val();
+        var results = this.state.results;
+        if (selected === 'price') this.setState({ results: results.sort(function (a, b) {
+                return parseFloat(a.price.slice(3)) - parseFloat(b.price.slice(3));
+            }) });else if (selected === 'duration') this.setState({ results: results.sort(function (a, b) {
+                return a.duration - b.duration;
+            }) });else if (selected === 'arrivalTime') this.setState({ results: results.sort(function (a, b) {
+                return new Date(a.arrivalTime) - new Date(b.arrivalTime);
+            }) });else return;
     },
     render: function render() {
         var resultList = this.state.results;
@@ -735,24 +746,63 @@ var SearchResults = React.createClass({
                 destinationTerminal: result.destinationTerminal
             });
         });
+
         return React.createElement(
-            "div",
-            { className: "searchResults col-xs-12 " },
-            React.createElement("fieldset", null),
+            'div',
+            { className: 'searchResults col-xs-12 ' },
+            React.createElement('fieldset', null),
             React.createElement(
-                "legend",
+                'legend',
                 null,
-                "Results"
+                'Results'
+            ),
+            resultList.length > 0 && React.createElement(
+                'select',
+                { id: 'orderBySelection', name: 'orderBySelection', className: 'pull-right', onChange: this.onChange.bind(this) },
+                React.createElement(
+                    'option',
+                    { selected: true, disabled: true },
+                    'Order by'
+                ),
+                React.createElement(
+                    'option',
+                    { value: 'price' },
+                    'Price'
+                ),
+                React.createElement(
+                    'option',
+                    { value: 'duration' },
+                    'Duration'
+                ),
+                React.createElement(
+                    'option',
+                    { value: 'arrivalTime' },
+                    'Arrival Time'
+                )
             ),
             results
         );
     }
 });
-'use strict';
+"use strict";
 
 var SearchForm = React.createClass({
-    displayName: 'SearchForm',
+    displayName: "SearchForm",
     getInitialState: function getInitialState() {
+        var _this = this;
+
+        $.ajax({
+            type: "GET",
+            url: "/airports",
+            success: function success(results) {
+                _this.airports = results;
+            },
+            error: function error(xhr, status, err) {
+                _this.setState({ error: xhr.responseText });
+                console.error(status, err.toString());
+            }
+        });
+
         return {
             error: "",
             query: {
@@ -767,11 +817,11 @@ var SearchForm = React.createClass({
     },
     componentWillMount: function componentWillMount() {},
     componentDidMount: function componentDidMount() {
-        var _this = this;
+        var _this2 = this;
 
         ReactDOM.unmountComponentAtNode(document.getElementById('content'));
         var setMaxPrice = function setMaxPrice(value) {
-            _this.state.query.maxPrice = value;
+            _this2.state.query.maxPrice = value;
         };
 
         $('#maxPrice').bootstrapSlider({
@@ -781,31 +831,31 @@ var SearchForm = React.createClass({
                 return 'Max Price: $' + value;
             }
         });
-
-        $.ajax({
-            type: "GET",
-            url: "/airports",
-            success: function success(results) {
-                var availableTags = results;
-                $("#origin").autocomplete({
-                    source: availableTags,
-                    delay: 0,
-                    minLength: 3
-                });
-                $("#destination").autocomplete({
-                    source: availableTags,
-                    delay: 0,
-                    minLength: 3
-                });
+        $("#origin").autocomplete({
+            source: function source(request, response) {
+                var matcher = new RegExp("\\b" + $.ui.autocomplete.escapeRegex(request.term), "i");
+                response($.grep(_this2.airports, function (item) {
+                    return matcher.test(item);
+                }));
             },
-            error: function error(xhr, status, err) {
-                _this.setState({ error: xhr.responseText });
-                console.error(status, err.toString());
-            }
+            autoFocus: true,
+            delay: 0,
+            minLength: 3
+        });
+        $("#destination").autocomplete({
+            source: function source(request, response) {
+                var matcher = new RegExp("\\b" + $.ui.autocomplete.escapeRegex(request.term), "i");
+                response($.grep(_this2.airports, function (item) {
+                    return matcher.test(item);
+                }));
+            },
+            autoFocus: true,
+            delay: 0,
+            minLength: 3
         });
     },
     onSearch: function onSearch(event) {
-        var _this2 = this;
+        var _this3 = this;
 
         event.preventDefault();
         this.setState({ errors: "", errorFlag: false });
@@ -821,10 +871,10 @@ var SearchForm = React.createClass({
             data: { query: newQuery },
             success: function success(results) {
                 console.log(results);
-                _this2.setState({ results: results, error: '' });
+                _this3.setState({ results: results, error: '' });
             },
             error: function error(xhr, status, err) {
-                _this2.setState({ error: xhr.responseText });
+                _this3.setState({ results: [], error: xhr.responseText });
                 console.error(status, err.toString());
             }
         });
@@ -840,144 +890,144 @@ var SearchForm = React.createClass({
     },
     render: function render() {
         return React.createElement(
-            'div',
-            { className: 'searchContainer' },
+            "div",
+            { className: "searchContainer" },
             React.createElement(
-                'a',
-                { href: '/logout', className: 'logout btn btn-default btn-sm' },
-                React.createElement('span', { className: 'glyphicon glyphicon-log-out' }),
-                ' Log out'
+                "a",
+                { href: "/logout", className: "logout btn btn-default btn-sm" },
+                React.createElement("span", { className: "glyphicon glyphicon-log-out" }),
+                " Log out"
             ),
             React.createElement(
-                'div',
-                { className: 'searchPanel panel panel-default col-xs-8 ' },
+                "div",
+                { className: "searchPanel panel panel-default col-xs-8 " },
                 React.createElement(
-                    'div',
-                    { className: 'panel-body' },
+                    "div",
+                    { className: "panel-body" },
                     React.createElement(
-                        'form',
-                        { onSubmit: this.onSearch, className: 'form-horizontal col-xs-12 searchForm' },
-                        React.createElement('fieldset', null),
+                        "form",
+                        { onSubmit: this.onSearch, className: "form-horizontal col-xs-12 searchForm" },
+                        React.createElement("fieldset", null),
                         React.createElement(
-                            'legend',
+                            "legend",
                             null,
-                            'Search Flights'
+                            "Search Flights"
                         ),
                         React.createElement(
-                            'div',
-                            { className: 'row' },
+                            "div",
+                            { className: "row" },
                             React.createElement(
-                                'div',
-                                { className: 'form-group inputDiv col-md-4', style: { "margin-left": "10px" } },
+                                "div",
+                                { className: "form-group inputDiv col-md-4", style: { "margin-left": "10px" } },
                                 React.createElement(
-                                    'label',
-                                    { className: 'control-label', htmlFor: 'origin' },
-                                    'Origin'
+                                    "label",
+                                    { className: "control-label", htmlFor: "origin" },
+                                    "Origin"
                                 ),
-                                React.createElement('input', { id: 'origin', name: 'origin', type: 'text', placeholder: 'Where are you flying from?', className: 'form-control input-md', required: 'true' })
+                                React.createElement("input", { id: "origin", name: "origin", type: "text", placeholder: "Where are you flying from?", className: "form-control input-md", required: "true" })
                             ),
                             React.createElement(
-                                'div',
-                                { className: 'form-group inputDiv col-md-4', style: { "margin-left": "10px" } },
+                                "div",
+                                { className: "form-group inputDiv col-md-4", style: { "margin-left": "10px" } },
                                 React.createElement(
-                                    'label',
-                                    { className: 'control-label', htmlFor: 'destination' },
-                                    'Destination'
+                                    "label",
+                                    { className: "control-label", htmlFor: "destination" },
+                                    "Destination"
                                 ),
-                                React.createElement('input', { id: 'destination', name: 'destination', type: 'text', placeholder: 'Where are you flying to?', className: 'form-control input-md', required: 'true' })
+                                React.createElement("input", { id: "destination", name: "destination", type: "text", placeholder: "Where are you flying to?", className: "form-control input-md", required: "true" })
                             )
                         ),
                         React.createElement(
-                            'div',
-                            { className: 'row' },
+                            "div",
+                            { className: "row" },
                             React.createElement(
-                                'div',
-                                { className: 'form-group inputDiv col-md-4 ', style: { "margin-left": "10px" } },
+                                "div",
+                                { className: "form-group inputDiv col-md-4 ", style: { "margin-left": "10px" } },
                                 React.createElement(
-                                    'label',
-                                    { className: 'control-label', htmlFor: 'ddate' },
-                                    'Departure Date'
+                                    "label",
+                                    { className: "control-label", htmlFor: "ddate" },
+                                    "Departure Date"
                                 ),
-                                React.createElement('input', { id: 'ddate', name: 'ddate', type: 'date', placeholder: 'Select departure date', className: 'form-control input-md', required: 'true', onChange: this.onChange, value: this.state.query.ddate })
+                                React.createElement("input", { id: "ddate", name: "ddate", type: "date", placeholder: "Select departure date", className: "form-control input-md", required: "true", onChange: this.onChange, value: this.state.query.ddate })
                             ),
                             React.createElement(
-                                'div',
-                                { className: 'form-group inputDiv col-md-3', style: { "margin-left": "10px" } },
+                                "div",
+                                { className: "form-group inputDiv col-md-3", style: { "margin-left": "10px" } },
                                 React.createElement(
-                                    'label',
-                                    { className: 'control-label', htmlFor: 'adultCount' },
-                                    'No. of Adults'
+                                    "label",
+                                    { className: "control-label", htmlFor: "adultCount" },
+                                    "No. of Adults"
                                 ),
                                 React.createElement(
-                                    'select',
-                                    { id: 'adultCount', name: 'adultCount', className: 'form-control', onChange: this.onChange, value: this.state.query.adultCount },
+                                    "select",
+                                    { id: "adultCount", name: "adultCount", className: "form-control", onChange: this.onChange, value: this.state.query.adultCount },
                                     React.createElement(
-                                        'option',
-                                        { value: '1' },
-                                        '1'
+                                        "option",
+                                        { value: "1" },
+                                        "1"
                                     ),
                                     React.createElement(
-                                        'option',
-                                        { value: '2' },
-                                        '2'
+                                        "option",
+                                        { value: "2" },
+                                        "2"
                                     ),
                                     React.createElement(
-                                        'option',
-                                        { value: '3' },
-                                        '3'
+                                        "option",
+                                        { value: "3" },
+                                        "3"
                                     ),
                                     React.createElement(
-                                        'option',
-                                        { value: '4' },
-                                        '4'
+                                        "option",
+                                        { value: "4" },
+                                        "4"
                                     ),
                                     React.createElement(
-                                        'option',
-                                        { value: '5' },
-                                        '5'
+                                        "option",
+                                        { value: "5" },
+                                        "5"
                                     ),
                                     React.createElement(
-                                        'option',
-                                        { value: '6' },
-                                        '6'
+                                        "option",
+                                        { value: "6" },
+                                        "6"
                                     )
                                 )
                             )
                         ),
                         React.createElement(
-                            'div',
-                            { className: 'row' },
+                            "div",
+                            { className: "row" },
                             React.createElement(
-                                'div',
-                                { className: 'form-group inputDiv col-md-4 ', style: { "margin-left": "10px" } },
+                                "div",
+                                { className: "form-group inputDiv col-md-4 ", style: { "margin-left": "10px" } },
                                 React.createElement(
-                                    'label',
-                                    { className: 'control-label', htmlFor: 'maxPrice' },
-                                    'Max Price'
+                                    "label",
+                                    { className: "control-label", htmlFor: "maxPrice" },
+                                    "Max Price"
                                 ),
-                                React.createElement('input', { id: 'maxPrice', name: 'maxPrice', 'data-slider-id': 'maxPrice', type: 'text', 'data-slider-min': '0', 'data-slider-max': '1000', 'data-slider-step': '1', 'data-slider-value': '0', className: 'form-control input-md', onChange: this.onChange, value: this.state.query.origin }),
-                                React.createElement('br', null),
-                                React.createElement('help', { className: 'maxPriceDisp', id: 'maxPriceDisp', name: 'maxPriceDisp' })
+                                React.createElement("input", { id: "maxPrice", name: "maxPrice", "data-slider-id": "maxPrice", type: "text", "data-slider-min": "0", "data-slider-max": "1000", "data-slider-step": "1", "data-slider-value": "0", className: "form-control input-md", onChange: this.onChange, value: this.state.query.origin }),
+                                React.createElement("br", null),
+                                React.createElement("help", { className: "maxPriceDisp", id: "maxPriceDisp", name: "maxPriceDisp" })
                             )
                         ),
                         React.createElement(
-                            'div',
-                            { className: 'row' },
+                            "div",
+                            { className: "row" },
                             React.createElement(
-                                'div',
-                                { className: 'form-group inputDiv col-md-4', style: { "margin-left": "10px" } },
-                                React.createElement('input', { className: 'btn btn-default', type: 'submit', value: 'Search' })
+                                "div",
+                                { className: "form-group inputDiv col-md-4", style: { "margin-left": "10px" } },
+                                React.createElement("input", { className: "btn btn-default", type: "submit", value: "Search" })
                             )
                         )
                     )
                 )
             ),
             React.createElement(
-                'div',
+                "div",
                 { className: this.state.error == '' ? 'hidden' : 'panel panel-error col-xs-8 show' },
                 React.createElement(
-                    'div',
-                    { className: 'panel-body' },
+                    "div",
+                    { className: "panel-body" },
                     this.state.error
                 )
             ),
