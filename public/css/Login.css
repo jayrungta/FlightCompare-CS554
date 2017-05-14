@@ -10,7 +10,6 @@ html, body {
 body {
     font-family: 'Raleway',sans-serif;
     position: relative;
-    /*background: rgba(0, 0, 0, 0) url("../img/ptn.png") repeat scroll 0 0;*/
 }
 
 .in-page {
@@ -23,12 +22,10 @@ body {
 
 a {
     color: #1b5a7c;
-    /*color:grey;*/
 }
 
 a:hover, a:focus {
    color: #1b5a7c;
-        /*color:grey;*/
 }
 
 .btn-cyan {
@@ -59,7 +56,7 @@ a:hover, a:focus {
 }
 
 .login-screen {
-    background-image: url(http://www.priorityonejets.com/wp-content/uploads/2013/08/Commercial-Airplane.jpg);
+    background-image: url(/public/css/images/login.jpg);
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
