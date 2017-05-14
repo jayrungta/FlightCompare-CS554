@@ -700,10 +700,10 @@ var ResultItem = React.createClass({
         );
     }
 });
-"use strict";
+'use strict';
 
 var SearchResults = React.createClass({
-    displayName: "SearchResults",
+    displayName: 'SearchResults',
     getInitialState: function getInitialState() {
         return {
             results: [],
@@ -715,6 +715,17 @@ var SearchResults = React.createClass({
     componentDidMount: function componentDidMount() {},
     componentWillReceiveProps: function componentWillReceiveProps(newProps) {
         this.setState({ results: newProps.results });
+    },
+    onChange: function onChange() {
+        var selected = $('#orderBySelection').val();
+        var results = this.state.results;
+        if (selected === 'price') this.setState({ results: results.sort(function (a, b) {
+                return parseFloat(a.price.slice(3)) - parseFloat(b.price.slice(3));
+            }) });else if (selected === 'duration') this.setState({ results: results.sort(function (a, b) {
+                return a.duration - b.duration;
+            }) });else if (selected === 'arrivalTime') this.setState({ results: results.sort(function (a, b) {
+                return new Date(a.arrivalTime) - new Date(b.arrivalTime);
+            }) });else return;
     },
     render: function render() {
         var resultList = this.state.results;
@@ -735,14 +746,39 @@ var SearchResults = React.createClass({
                 destinationTerminal: result.destinationTerminal
             });
         });
+
         return React.createElement(
-            "div",
-            { className: "searchResults col-xs-12 " },
-            React.createElement("fieldset", null),
+            'div',
+            { className: 'searchResults col-xs-12 ' },
+            React.createElement('fieldset', null),
             React.createElement(
-                "legend",
+                'legend',
                 null,
-                "Results"
+                'Results'
+            ),
+            resultList.length > 0 && React.createElement(
+                'select',
+                { id: 'orderBySelection', name: 'orderBySelection', className: 'pull-right', onChange: this.onChange.bind(this) },
+                React.createElement(
+                    'option',
+                    { selected: true, disabled: true },
+                    'Order by'
+                ),
+                React.createElement(
+                    'option',
+                    { value: 'price' },
+                    'Price'
+                ),
+                React.createElement(
+                    'option',
+                    { value: 'duration' },
+                    'Duration'
+                ),
+                React.createElement(
+                    'option',
+                    { value: 'arrivalTime' },
+                    'Arrival Time'
+                )
             ),
             results
         );
