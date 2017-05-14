@@ -838,7 +838,7 @@ var SearchForm = React.createClass({
                 _this3.setState({ results: results, error: '' });
             },
             error: function error(xhr, status, err) {
-                _this3.setState({ error: xhr.responseText });
+                _this3.setState({ results: [], error: xhr.responseText });
                 console.error(status, err.toString());
             }
         });

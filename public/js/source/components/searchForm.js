@@ -86,7 +86,7 @@ const SearchForm = React.createClass({
                 this.setState({ results: results, error: '' });
             },
             error: (xhr, status, err) => {
-                this.setState({ error: xhr.responseText });
+                this.setState({ results: [], error: xhr.responseText });
                 console.error(status, err.toString());
             }
         });
