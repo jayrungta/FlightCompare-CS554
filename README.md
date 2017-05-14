@@ -10,8 +10,7 @@ The website will display comparisons between flight prices from several popular 
 # Running
 - Make sure that your `Redis` and `mongodb` are working and `wkhtmltopdf` is installed in your machine.
 - Install all dependencies using `npm install`
-- Run the workers using `node worker/worker.js`
-- Run the application using `node server.js`
+- Run the application using `npm start`
 
 # Built With
 
