@@ -55,6 +55,11 @@ a {
 	background: #BABABA;
 }
 
+.comment p {
+    margin: 0;
+    line-height: 1.25em;
+}
+
 /*.form-group .inputDiv {
     margin-left: 10px;
 }*/

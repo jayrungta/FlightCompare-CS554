@@ -1,5 +1,17 @@
 const SearchForm = React.createClass({
     getInitialState() {
+        $.ajax({
+            type: "GET",
+            url: "/airports",
+            success: (results) => {
+                this.airports = results;
+            },
+            error: (xhr, status, err) => {
+                this.setState({ error: xhr.responseText });
+                console.error(status, err.toString());
+            }
+        });
+
         return {
             error: "",
             query: {
@@ -29,27 +41,27 @@ const SearchForm = React.createClass({
                 return 'Max Price: $' + value;
             }
         });
-
-        $.ajax({
-            type: "GET",
-            url: "/airports",
-            success: (results) => {
-                var availableTags = results;
-                $("#origin").autocomplete({
-                    source: availableTags,
-                    delay: 0,
-                    minLength: 3
-                });
-                $("#destination").autocomplete({
-                    source: availableTags,
-                    delay: 0,
-                    minLength: 3
-                });
+        $("#origin").autocomplete({
+            source: (request, response) => {
+                let matcher = new RegExp("\\b" + $.ui.autocomplete.escapeRegex(request.term), "i");
+                response($.grep(this.airports, function (item) {
+                    return matcher.test(item);
+                }));
             },
-            error: (xhr, status, err) => {
-                this.setState({ error: xhr.responseText });
-                console.error(status, err.toString());
-            }
+            autoFocus: true,
+            delay: 0,
+            minLength: 3
+        });
+        $("#destination").autocomplete({
+            source: (request, response) => {
+                let matcher = new RegExp("\\b" + $.ui.autocomplete.escapeRegex(request.term), "i");
+                response($.grep(this.airports, function (item) {
+                    return matcher.test(item);
+                }));
+            },
+            autoFocus: true,
+            delay: 0,
+            minLength: 3
         });
     },
 
