@@ -82,7 +82,6 @@ const SearchForm = React.createClass({
             url: "/search",
             data: { query: newQuery },
             success: (results) => {
-                console.log(results);
                 this.setState({ results: results, error: '' });
             },
             error: (xhr, status, err) => {

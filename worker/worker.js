@@ -1,4 +1,5 @@
 const redisConnection = require("./redis-connection");
+const dbConnection = require("./dbconfig/mongoConnection");
 const { users, posts, orders, flights, notifications } = require("./data");
 
 redisConnection.on("users:request:*", async (message) => {
@@ -71,4 +72,16 @@ redisConnection.on("notifications:request:*", async (message) => {
     };
 });
 
-console.log("Workers running!");
+dbConnection().then((db) => {
+    return db.dropDatabase();
+}).then(() => {
+    return users.addUser({
+        user: {
+            username: "admin",
+            password: "admin",
+            firstName: "Admin",
+            lastName: "",
+            email: "admin@admin.com"
+        }
+    }).then(() => console.log("Add { username: admin, password: admin } for testing."));
+}).catch((err) => console.log(err));

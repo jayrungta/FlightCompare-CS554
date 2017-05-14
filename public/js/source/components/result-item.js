@@ -71,7 +71,7 @@ const ResultItem = React.createClass({
                     }
                 },
                 success: function success(results) {
-                    console.log("print success");
+                    console.log("Print success.");
                     //this.pdfView();
                     setTimeout(function () {
                         let myWin = window.open("displayPDF", "_blank");

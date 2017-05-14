@@ -42,8 +42,6 @@ const constructorMethods = (passport) =>{
 				else{
 					//if not then create one
 						userData.addUser(username, password).then((newUser)=>{
-							console.log(newUser);
-							console.log("User create success.");
 							return done(null, newUser);
 						}).catch((err)=>{
 							console.log(err);

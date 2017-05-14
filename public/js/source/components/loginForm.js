@@ -58,14 +58,12 @@ const LoginForm = React.createClass({
         event.preventDefault();
         this.setState({ error: ""});
         let newUser = { firstName: this.state.user.firstname, lastName: this.state.user.lastname, username: this.state.user.username, password: this.state.user.password, email: this.state.user.email };
-        // console.log(newUser);
 
         $.ajax({
             type: "POST",
             url: "/login/register",
             data: { user: newUser },
             success: (userId) => {
-                // console.log(userId);
                 this.setState({
                     error: '',
                     user: {
@@ -94,7 +92,6 @@ const LoginForm = React.createClass({
             url: "/login",
             data: { username: this.state.user.username, password: this.state.user.password },
             success: (user) => {
-                // console.log(user);
                 this.setState({
                     error: '',
                     user: {
@@ -159,7 +156,6 @@ const LoginForm = React.createClass({
     },
     render() {
         if (this.state.loggedIn) {
-            console.log("logged in");
             window.location = "/";
         }
         else {
