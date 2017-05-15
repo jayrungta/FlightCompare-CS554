@@ -55,13 +55,17 @@ const SearchResults = React.createClass({
                 <fieldset />
                 <legend>Results</legend>
                 {resultList.length > 0 &&
-                    <select id="orderBySelection" name="orderBySelection" className="pull-right" onChange={this.onChange.bind(this)}>
-                        <option selected disabled>Order by</option>
-                        <option value="price">Price</option>
-                        <option value="duration">Duration</option>
-                        <option value="arrivalTime">Arrival Time</option>
-                    </select>
+                    <div className="col-xs-3 col-xs-offset-9">
+                        <select id="orderBySelection" name="orderBySelection" className="pull-right form-control form-control-sm" onChange={this.onChange.bind(this)}>
+                            <option selected disabled>Order by</option>
+                            <option value="price">Price</option>
+                            <option value="duration">Duration</option>
+                            <option value="arrivalTime">Arrival Time</option>
+                        </select>
+                    </div>
                 }
+                <br />
+                <br />
                 {results}
             </div>
         );

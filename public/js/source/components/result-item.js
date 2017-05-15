@@ -86,9 +86,6 @@ const ResultItem = React.createClass({
             });
         }
     },
-    doTrack: function () {
-        alert('Track');
-    },
     getExpandedDiv: function () {
         if (this.state.expanded) {
             return <div><br />
@@ -116,7 +113,6 @@ const ResultItem = React.createClass({
                 <div className="row">
                     <div className="col-md-12">
                         <a className="btn btn-default" onClick={this.doPrint}>Print</a>&#160;
-                    {/*<a className="btn btn-default" onClick={this.doTrack}>Track</a>&#160;*/}
                         <a className="btn btn-default" href={"http://www.google.com/search?q=" + this.props.airlineName + "&btnI"} target="_blank">Book</a>
                     </div>
                 </div>

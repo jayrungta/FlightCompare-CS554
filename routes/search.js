@@ -29,9 +29,8 @@ router.post("/airlines", (req, res) => {
         let originName = req.body.flight.originName;
         let destinationName = req.body.flight.destinationName;
         let originTerminal = req.body.flight.originTerminal;
-        let destinationTerminal = req.body.flight.destinationTerminal;
+        let destinationTerminal = req.body.flight.destinationTerminal === undefined ? "N/A" : req.body.flight.destinationTerminal;
         let meal = req.body.flight.meal === undefined ? "N/A" : req.body.flight.meal;
-
 
         wkhtmlpdf(`<div class="container">
     <div class="row">
@@ -52,19 +51,16 @@ router.post("/airlines", (req, res) => {
                                     <td><strong>From</strong></td>
                                     <td><strong>To</strong></td>
                                     <td><strong>Duration</strong></td>
+                                    <td><strong>Meal</strong></td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>${airlineName}</td>
                                     <td>${originName}(${origin})<br />${departureTime}<br />Terminal: ${originTerminal}</td>
-                                    <td>${destinationName}(${destination})<br />${arrivalTime}<br />Terminal: ${destinationTerminal}</td>
+                                    <td>${destinationName}(${destination})<br/>${arrivalTime}<br/>Terminal: ${destinationTerminal}</td>
                                     <td>${duration}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3"></td>
-                                    <td class="text-right"><strong>Meal</strong></td>
-                                    <td class="text-right"><strong>${meal}</strong></td>
+                                    <td>${meal}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="3"></td>

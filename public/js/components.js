@@ -62,14 +62,12 @@ var LoginForm = React.createClass({
         event.preventDefault();
         this.setState({ error: "" });
         var newUser = { firstName: this.state.user.firstname, lastName: this.state.user.lastname, username: this.state.user.username, password: this.state.user.password, email: this.state.user.email };
-        // console.log(newUser);
 
         $.ajax({
             type: "POST",
             url: "/login/register",
             data: { user: newUser },
             success: function success(userId) {
-                // console.log(userId);
                 _this2.setState({
                     error: '',
                     user: {
@@ -100,7 +98,6 @@ var LoginForm = React.createClass({
             url: "/login",
             data: { username: this.state.user.username, password: this.state.user.password },
             success: function success(user) {
-                // console.log(user);
                 _this3.setState({
                     error: '',
                     user: {
@@ -163,7 +160,6 @@ var LoginForm = React.createClass({
     },
     render: function render() {
         if (this.state.loggedIn) {
-            console.log("logged in");
             window.location = "/";
         } else {
             return React.createElement(
@@ -501,7 +497,7 @@ var ResultItem = React.createClass({
                     }
                 },
                 success: function success(results) {
-                    console.log("print success");
+                    console.log("Print success.");
                     //this.pdfView();
                     setTimeout(function () {
                         var myWin = window.open("displayPDF", "_blank");
@@ -514,9 +510,6 @@ var ResultItem = React.createClass({
                 }
             });
         }
-    },
-    doTrack: function doTrack() {
-        alert('Track');
     },
     getExpandedDiv: function getExpandedDiv() {
         if (this.state.expanded) {
@@ -757,29 +750,35 @@ var SearchResults = React.createClass({
                 'Results'
             ),
             resultList.length > 0 && React.createElement(
-                'select',
-                { id: 'orderBySelection', name: 'orderBySelection', className: 'pull-right', onChange: this.onChange.bind(this) },
+                'div',
+                { className: 'col-xs-3 col-xs-offset-9' },
                 React.createElement(
-                    'option',
-                    { selected: true, disabled: true },
-                    'Order by'
-                ),
-                React.createElement(
-                    'option',
-                    { value: 'price' },
-                    'Price'
-                ),
-                React.createElement(
-                    'option',
-                    { value: 'duration' },
-                    'Duration'
-                ),
-                React.createElement(
-                    'option',
-                    { value: 'arrivalTime' },
-                    'Arrival Time'
+                    'select',
+                    { id: 'orderBySelection', name: 'orderBySelection', className: 'pull-right form-control form-control-sm', onChange: this.onChange.bind(this) },
+                    React.createElement(
+                        'option',
+                        { selected: true, disabled: true },
+                        'Order by'
+                    ),
+                    React.createElement(
+                        'option',
+                        { value: 'price' },
+                        'Price'
+                    ),
+                    React.createElement(
+                        'option',
+                        { value: 'duration' },
+                        'Duration'
+                    ),
+                    React.createElement(
+                        'option',
+                        { value: 'arrivalTime' },
+                        'Arrival Time'
+                    )
                 )
             ),
+            React.createElement('br', null),
+            React.createElement('br', null),
             results
         );
     }
@@ -870,7 +869,6 @@ var SearchForm = React.createClass({
             url: "/search",
             data: { query: newQuery },
             success: function success(results) {
-                console.log(results);
                 _this3.setState({ results: results, error: '' });
             },
             error: function error(xhr, status, err) {
